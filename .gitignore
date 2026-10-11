@@ -1,0 +1,83 @@
+# Python environments and interpreter-specific files
+.venv/
+venv/
+env/
+.python-version
+pyvenv.cfg
+
+# Python caches, test output, and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets/
+**/secrets/
+credentials/
+**/credentials/
+*credentials*
+*secret*
+**/config.local.*
+*.token
+.pypirc
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Machine-specific editor settings
+.vscode/
+.idea/
+
+# Local datasets, including synthetic and real cropped images
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/cropped/*
+!/data/cropped/.gitkeep
+/data/labels/*
+!/data/labels/.gitkeep
+/data/evaluation/images/*
+!/data/evaluation/images/.gitkeep
+*.dcm
+
+# Model checkpoints, downloaded weights, and Hugging Face caches
+/models/*
+!/models/checkpoints/
+!/models/final/
+/models/checkpoints/*
+!/models/checkpoints/.gitkeep
+/models/final/*
+!/models/final/.gitkeep
+.cache/
+**/.cache/huggingface/
+**/huggingface/hub/
+**/models--*/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+
+# Evaluation results, generated reports, logs, and temporary files
+/data/evaluation/evaluation_results.csv
+/data/evaluation/evaluation_report.json
+logs/
+*.log
+*.tmp
+*.temp
+*.bak
+
+# Operating-system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
