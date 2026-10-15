@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartVision — Assistive Reading OCR Demo</title>
+  <style>
+    :root {
+      --bg: #0c1017;
+      --card-bg: #151b26;
+      --card-border: #232d3f;
+      --card-hover: #1c2433;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --code-bg: #090d14;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.5;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Important Model Notice */
+    .notice-banner {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: #fef3c7;
+    }
+
+    .notice-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .notice-content strong {
+      color: #fbbf24;
+    }
+
+    /* Split Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text);
+    }
+
+    /* Samples selector */
+    .samples-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .samples-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sample-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sample-btn {
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sample-btn:hover {
+      background: #2a3547;
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .sample-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Dropzone */
+    .dropzone {
+      border: 2px dashed var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .dropzone-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .dropzone-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .dropzone-hint {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* Viewer Stage */
+    .viewer-wrapper {
+      position: relative;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .viewer-empty {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .canvas-container {
+      position: relative;
+      max-width: 100%;
+      max-height: 600px;
+      display: none;
+    }
+
+    #preview-image {
+      display: block;
+      max-width: 100%;
+      max-height: 600px;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    #overlay-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Action bar */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-extract {
+      flex: 1;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    .btn-extract:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-extract:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-clear:hover {
+      background: #2a3547;
+      color: var(--text);
+    }
+
+    /* Metrics Strip */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .metric-card {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Results */
+    .result-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .text-box {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 140px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.6;
+    }
+
+    .text-box.placeholder {
+      color: var(--text-dim);
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+    }
+
+    /* Regions Table */
+    .regions-wrapper {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    th {
+      background: #111722;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .score-badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    /* Error alert */
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Tabs */
+    .view-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    #json-view {
+      display: none;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-badge">👁</div>
+        <div>
+          <h1>SmartVision OCR Explorer</h1>
+          <div class="subtitle">Assistive Reading Smart Glasses — AI Vision Module</div>
+        </div>
+      </div>
+      <div class="system-status">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span id="system-status-text">Engine Ready (CPU)</span>
+        </div>
+        <div class="badge" title="Recognizers for Telugu and Hindi are in active development">
+          <span>Active Recognizer: TrOCR Printed (English)</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Language Disclaimer Banner -->
+    <div class="notice-banner">
+      <div class="notice-icon">ℹ️</div>
+      <div class="notice-content">
+        <strong>Engine Scope & Language Capability:</strong> The current active recognizer is <code>microsoft/trocr-base-printed</code>, validated strictly for <strong>English printed text</strong>. Regional language OCR (<strong>Telugu</strong> as primary priority and <strong>Hindi</strong> as secondary priority) is under active dataset curation and pipeline training. Indic text recognition will not be recognized by this checkpoint.
+      </div>
+    </div>
+
+    <!-- Error Alert Box -->
+    <div id="error-alert" class="alert-error">
+      <span style="font-size: 1.2rem;">⚠️</span>
+      <div id="error-message"></div>
+    </div>
+
+    <div class="grid">
+      <!-- Left Column: Image Selection and Viewer -->
+      <div class="card">
+        <div class="card-title">
+          <span>1. Select or Upload Image</span>
+          <span id="image-dimensions" style="font-size: 0.8rem; color: var(--text-muted);"></span>
+        </div>
+
+        <!-- Pre-loaded samples -->
+        <div class="samples-bar">
+          <div class="samples-label">Quick Test Samples:</div>
+          <div class="sample-chips" id="sample-chips">
+            <!-- Populated via API -->
+            <button class="sample-btn" onclick="loadSample('data/cropped/ocr_test.png')">Paracetamol Crop (English)</button>
+            <button class="sample-btn" onclick="loadSample('data/telugu_wikisource/images/te_line_0000.png')">Telugu Line 0000</button>
+            <button class="sample-btn" onclick="loadSample('data/telugu_wikisource/images/te_line_0032.png')">Telugu Line 0032</button>
+            <button class="sample-btn" onclick="loadSample('data/evaluation/images/line_001.png')">Medicine Line Crop 001</button>
+            <button class="sample-btn" onclick="loadSample('data/Medicine_data/images02.jpg')">Medicine Bottle Photo 02</button>
+            <button class="sample-btn" onclick="loadSample('data/Medicine_data/images03.jpg')">Medicine Package Photo 03</button>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+          <div class="dropzone-icon">📷</div>
+          <div class="dropzone-text"><strong>Click to browse</strong> or drag & drop any image here</div>
+          <div class="dropzone-hint">Supports PNG, JPG, JPEG, WEBP, BMP (Road signs, documents, notices, packaging)</div>
+          <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
+        </div>
+
+        <!-- Canvas / Image Viewer -->
+        <div class="viewer-wrapper" id="viewer-wrapper">
+          <div class="viewer-empty" id="viewer-empty">
+            Select a sample above or upload an image to inspect and extract text.
+          </div>
+          <div class="canvas-container" id="canvas-container">
+            <img id="preview-image" alt="Selected Image">
+            <canvas id="overlay-canvas"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: OCR Action and Results -->
+      <div class="card">
+        <div class="card-title">
+          <span>2. OCR Pipeline & Results</span>
+          <span id="reading-order-count" style="font-size: 0.8rem; color: var(--text-muted);"></span>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="lang-selector-bar" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(15, 23, 42, 0.4); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+          <label for="lang-select" style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">Recognition Engine:</label>
+          <select id="lang-select" style="background: var(--card-hover); color: var(--text); border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; cursor: pointer;">
+            <option value="auto" selected>Auto / Telugu (PP-OCRv5 Mobile - 7.5MB)</option>
+            <option value="telugu">Telugu (PP-OCRv5 Mobile - High Speed)</option>
+            <option value="hindi">Hindi / Devanagari (PP-OCRv5 Mobile)</option>
+            <option value="english">English (PP-OCRv5 Mobile - 7.5MB)</option>
+            <option value="trocr">English Printed (Legacy TrOCR - 1.3GB)</option>
+          </select>
+        </div>
+
+        <!-- Action Button -->
+        <div class="action-bar">
+          <button class="btn-extract" id="btn-extract" onclick="extractText()" disabled>
+            <span class="spinner" id="spinner"></span>
+            <span id="btn-text">⚡ Extract Text</span>
+          </button>
+          <button class="btn-clear" onclick="clearAll()">Clear</button>
+        </div>
+
+        <!-- Performance / Latency Strip -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value" id="metric-total">--</div>
+            <div class="metric-label">Total Latency</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-det">--</div>
+            <div class="metric-label">Detection</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-rec">--</div>
+            <div class="metric-label">Recognition</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-regions">--</div>
+            <div class="metric-label">Regions Found</div>
+          </div>
+        </div>
+
+        <!-- Output Views Tabs -->
+        <div class="result-section">
+          <div class="section-header">
+            <div class="view-tabs">
+              <button class="tab-btn active" id="tab-text" onclick="switchTab('text')">Extracted Text</button>
+              <button class="tab-btn" id="tab-regions" onclick="switchTab('regions')">Detected Regions</button>
+              <button class="tab-btn" id="tab-json" onclick="switchTab('json')">Structured JSON</button>
+            </div>
+            <button class="copy-btn" id="copy-btn" onclick="copyResult()">📋 Copy</button>
+          </div>
+
+          <!-- View 1: Extracted Text (Natural Reading Order) -->
+          <div id="text-view">
+            <div class="text-box placeholder" id="text-output">
+              Extracted text will appear here in natural reading order after extraction.
+            </div>
+          </div>
+
+          <!-- View 2: Regions Table -->
+          <div id="regions-view" style="display: none;">
+            <div class="regions-wrapper">
+              <table id="regions-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Reading Order</th>
+                    <th>Score</th>
+                    <th>Recognized Text Line</th>
+                  </tr>
+                </thead>
+                <tbody id="regions-tbody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-dim); padding: 24px;">No regions detected yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- View 3: Structured JSON (Downstream API Contract) -->
+          <div id="json-view">
+            <div class="text-box" id="json-output" style="font-size: 0.8rem;">{}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      SmartVision AI Assistive Reading Smart Glasses • Real PyTorch & PaddleOCR Pipeline • Local Execution
+    </footer>
+  </div>
+
+  <script>
+    let currentImageBase64 = null;
+    let currentSamplePath = null;
+    let lastOCRResult = null;
+    let timerInterval = null;
+
+    const previewImg = document.getElementById('preview-image');
+    const overlayCanvas = document.getElementById('overlay-canvas');
+    const canvasContainer = document.getElementById('canvas-container');
+    const viewerEmpty = document.getElementById('viewer-empty');
+    const btnExtract = document.getElementById('btn-extract');
+    const btnText = document.getElementById('btn-text');
+    const spinner = document.getElementById('spinner');
+    const errorAlert = document.getElementById('error-alert');
+    const errorMessage = document.getElementById('error-message');
+    const dropzone = document.getElementById('dropzone');
+
+    // Drag and drop handlers
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        processFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    function handleFileSelect(event) {
+      if (event.target.files.length > 0) {
+        processFile(event.target.files[0]);
+      }
+    }
+
+    function processFile(file) {
+      if (!file.type.startsWith('image/')) {
+        showError('Please upload a valid image file (PNG, JPG, WEBP, BMP).');
+        return;
+      }
+      clearError();
+      currentSamplePath = null;
+      document.querySelectorAll('.sample-btn').forEach(b => b.classList.remove('active'));
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentImageBase64 = e.target.result;
+        displayImage(currentImageBase64);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadSample(samplePath) {
+      clearError();
+      currentSamplePath = samplePath;
+      currentImageBase64 = null;
+
+      document.querySelectorAll('.sample-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('onclick').includes(samplePath));
+      });
+
+      const imageUrl = `/api/image?path=${encodeURIComponent(samplePath)}`;
+      displayImage(imageUrl);
+    }
+
+    function displayImage(src) {
+      previewImg.onload = () => {
+        viewerEmpty.style.display = 'none';
+        canvasContainer.style.display = 'block';
+        document.getElementById('image-dimensions').textContent = `${previewImg.naturalWidth} × ${previewImg.naturalHeight} px`;
+        btnExtract.disabled = false;
+        clearCanvas();
+        resetResults();
+      };
+      previewImg.src = src;
+    }
+
+    function clearCanvas() {
+      const ctx = overlayCanvas.getContext('2d');
+      overlayCanvas.width = previewImg.naturalWidth;
+      overlayCanvas.height = previewImg.naturalHeight;
+      ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    }
+
+    function resetResults() {
+      lastOCRResult = null;
+      document.getElementById('text-output').textContent = 'Extracted text will appear here in natural reading order after extraction.';
+      document.getElementById('text-output').classList.add('placeholder');
+      document.getElementById('json-output').textContent = '{}';
+      document.getElementById('metric-total').textContent = '--';
+      document.getElementById('metric-det').textContent = '--';
+      document.getElementById('metric-rec').textContent = '--';
+      document.getElementById('metric-regions').textContent = '--';
+      document.getElementById('reading-order-count').textContent = '';
+      document.getElementById('regions-tbody').innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-dim); padding: 24px;">No regions detected yet.</td></tr>';
+    }
+
+    function clearAll() {
+      currentImageBase64 = null;
+      currentSamplePath = null;
+      previewImg.src = '';
+      canvasContainer.style.display = 'none';
+      viewerEmpty.style.display = 'block';
+      document.getElementById('image-dimensions').textContent = '';
+      document.getElementById('file-input').value = '';
+      document.querySelectorAll('.sample-btn').forEach(b => b.classList.remove('active'));
+      btnExtract.disabled = true;
+      clearCanvas();
+      resetResults();
+      clearError();
+    }
+
+    let isExtracting = false;
+
+    async function extractText() {
+      if (isExtracting) return;
+      if (!currentImageBase64 && !currentSamplePath) {
+        showError('Please upload an image or select a sample first.');
+        return;
+      }
+
+      isExtracting = true;
+      clearError();
+      setLoading(true);
+
+      const startTime = performance.now();
+      timerInterval = setInterval(() => {
+        const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
+        btnText.textContent = `Extracting... (${elapsed}s)`;
+      }, 100);
+
+      try {
+        const langEl = document.getElementById('lang-select');
+        const selectedLang = langEl ? langEl.value : 'auto';
+        const payload = currentSamplePath 
+          ? { sample_path: currentSamplePath, language: selectedLang }
+          : { image_data: currentImageBase64, language: selectedLang };
+
+        const response = await fetch('/api/extract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+        const rawText = await response.text();
+
+        let data = null;
+        if (rawText && rawText.trim().length > 0) {
+          try {
+            data = JSON.parse(rawText);
+          } catch (jsonErr) {
+            console.error('Non-JSON response:', rawText);
+            throw new Error(`Server returned unexpected response (HTTP ${response.status}): ${rawText.slice(0, 160)}`);
+          }
+        } else {
+          throw new Error(`Server returned empty response (HTTP ${response.status}). Inference may have timed out or been interrupted.`);
+        }
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || `OCR extraction failed with HTTP ${response.status}.`);
+        }
+
+        renderResults(data);
+      } catch (err) {
+        showError(err.message || 'Inference pipeline failure.');
+      } finally {
+        clearInterval(timerInterval);
+        isExtracting = false;
+        setLoading(false);
+      }
+    }
+
+    function renderResults(result) {
+      lastOCRResult = result;
+
+      // Metrics
+      const totalMs = result.timing_ms?.total_ms ?? 0;
+      const detMs = result.timing_ms?.detection_ms ?? 0;
+      const recMs = result.timing_ms?.recognition_ms ?? 0;
+
+      document.getElementById('metric-total').textContent = `${Math.round(totalMs)} ms`;
+      document.getElementById('metric-det').textContent = `${Math.round(detMs)} ms`;
+      document.getElementById('metric-rec').textContent = `${Math.round(recMs)} ms`;
+      document.getElementById('metric-regions').textContent = (result.regions || []).length;
+
+      // Text Output
+      const textOutput = document.getElementById('text-output');
+      if (result.text && result.text.trim()) {
+        textOutput.textContent = result.text;
+        textOutput.classList.remove('placeholder');
+      } else {
+        textOutput.textContent = '(No text detected in this image)';
+        textOutput.classList.add('placeholder');
+      }
+
+      // JSON Output
+      document.getElementById('json-output').textContent = JSON.stringify(result, null, 2);
+
+      // Render Regions Table
+      const tbody = document.getElementById('regions-tbody');
+      if (!result.regions || result.regions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-dim); padding: 24px;">No text regions detected.</td></tr>';
+      } else {
+        tbody.innerHTML = result.regions.map((reg, idx) => `
+          <tr>
+            <td><strong>#${idx + 1}</strong></td>
+            <td>Order ${reg.reading_order + 1}</td>
+            <td><span class="score-badge">${reg.detector_score ? (reg.detector_score * 100).toFixed(0) + '%' : 'N/A'}</span></td>
+            <td><code>${escapeHtml(reg.recognized_text || '(empty)')}</code></td>
+          </tr>
+        `).join('');
+      }
+
+      // Draw bounding polygons on Canvas
+      drawOverlayPolygons(result.regions || []);
+    }
+
+    function drawOverlayPolygons(regions) {
+      clearCanvas();
+      if (!regions || regions.length === 0) return;
+
+      const ctx = overlayCanvas.getContext('2d');
+      const w = overlayCanvas.width;
+      const h = overlayCanvas.height;
+
+      regions.forEach((region, idx) => {
+        const poly = region.polygon;
+        if (!poly || poly.length < 3) return;
+
+        // Draw bounding polygon outline
+        ctx.beginPath();
+        ctx.moveTo(poly[0][0], poly[0][1]);
+        for (let i = 1; i < poly.length; i++) {
+          ctx.lineTo(poly[i][0], poly[i][1]);
+        }
+        ctx.closePath();
+
+        // Stroke & Fill
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = Math.max(2, Math.round(w / 400));
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+        ctx.fill();
+
+        // Draw region badge
+        const badgeX = poly[0][0];
+        const badgeY = Math.max(16, poly[0][1] - 4);
+        ctx.fillStyle = '#1d4ed8';
+        const fontSize = Math.max(12, Math.round(w / 60));
+        ctx.font = `bold ${fontSize}px sans-serif`;
+        
+        const label = `#${idx + 1}`;
+        const metrics = ctx.measureText(label);
+        const pad = 4;
+        ctx.fillRect(badgeX, badgeY - fontSize, metrics.width + pad * 2, fontSize + pad);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(label, badgeX + pad, badgeY - 2);
+      });
+    }
+
+    function switchTab(tabName) {
+      document.getElementById('tab-text').classList.toggle('active', tabName === 'text');
+      document.getElementById('tab-regions').classList.toggle('active', tabName === 'regions');
+      document.getElementById('tab-json').classList.toggle('active', tabName === 'json');
+
+      document.getElementById('text-view').style.display = tabName === 'text' ? 'block' : 'none';
+      document.getElementById('regions-view').style.display = tabName === 'regions' ? 'block' : 'none';
+      document.getElementById('json-view').style.display = tabName === 'json' ? 'block' : 'none';
+    }
+
+    function copyResult() {
+      const activeTab = document.querySelector('.tab-btn.active').id;
+      let content = '';
+      if (activeTab === 'tab-json') {
+        content = document.getElementById('json-output').textContent;
+      } else {
+        content = document.getElementById('text-output').textContent;
+      }
+      navigator.clipboard.writeText(content).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const old = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = old, 1500);
+      });
+    }
+
+    function setLoading(loading) {
+      btnExtract.disabled = loading;
+      spinner.style.display = loading ? 'inline-block' : 'none';
+      document.querySelectorAll('.sample-btn').forEach(b => b.disabled = loading);
+      if (!loading) {
+        btnText.textContent = '⚡ Extract Text';
+      }
+    }
+
+    function showError(msg) {
+      errorAlert.style.display = 'flex';
+      errorMessage.textContent = msg;
+    }
+
+    function clearError() {
+      errorAlert.style.display = 'none';
+      errorMessage.textContent = '';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Auto-select initial sample for instant testing
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSample('data/cropped/ocr_test.png');
+    });
+  </script>
+</body>
+</html>

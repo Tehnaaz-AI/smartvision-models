@@ -1,0 +1,95 @@
+# Python environments and interpreter-specific files
+.venv/
+venv/
+env/
+.python-version
+pyvenv.cfg
+
+# Python caches, test output, and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets/
+**/secrets/
+credentials/
+**/credentials/
+*credentials*
+*secret*
+**/config.local.*
+*.token
+.pypirc
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Machine-specific editor settings
+.vscode/
+.idea/
+
+# Local datasets, including synthetic and real cropped images
+/data/cropped/*
+!/data/cropped/.gitkeep
+/data/labels/*
+!/data/labels/.gitkeep
+/data/normalized/
+/data/derived/
+/data/evaluation/images/*
+!/data/evaluation/images/.gitkeep
+*.dcm
+
+# Model checkpoints, downloaded weights, and Hugging Face caches
+/models/*
+!/models/checkpoints/
+!/models/final/
+/models/checkpoints/*
+!/models/checkpoints/.gitkeep
+/models/final/*
+!/models/final/.gitkeep
+.cache/
+**/.cache/huggingface/
+**/huggingface/hub/
+**/models--*/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+
+# Evaluation results, generated reports, logs, and temporary files
+/data/evaluation/evaluation_results.csv
+/data/evaluation/evaluation_report.json
+/data/evaluation/crop_sources.csv
+/data/predictions/
+/reports/drug_sticker_contact_sheet.jpg
+logs/
+*.log
+*.tmp
+*.temp
+*.bak
+
+
+# Local medicine image dataset — do not commit
+/data/Medicine_data/
+/data/DrugSticker_data/
+/data/vignette-ocr/
+/data/telugu_wikisource/images/
+/data/telugu_wikisource/*.parquet
+/data/evaluation/telugu_baseline_results.csv
+
+
+# Operating-system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store

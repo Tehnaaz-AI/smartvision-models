@@ -1,0 +1,22 @@
+{
+  "model": "te_PP-OCRv5_mobile_rec",
+  "device": "cpu",
+  "total_rows": 427,
+  "images_evaluated": 427,
+  "failed_predictions": 0,
+  "invalid_rows": 0,
+  "metrics": {
+    "cer": 0.1319914939913951,
+    "wer": 0.6120857699805068,
+    "exact_match_rate": 0.0585480093676815,
+    "exact_match_rate_case_insensitive": 0.0585480093676815
+  },
+  "latency": {
+    "total_inference_ms": 205031.03,
+    "average_ms_per_image": 480.17
+  },
+  "case_insensitive_normalization": "Unicode casefold only; no removal of units, numbers, punctuation, or whitespace.",
+  "word_error_rate_tokenization": "Split on whitespace; punctuation and token content are retained.",
+  "empty_reference_denominator": "Use one when a reference has zero characters/words so insertions are counted and the score is defined.",
+  "errors": []
+}

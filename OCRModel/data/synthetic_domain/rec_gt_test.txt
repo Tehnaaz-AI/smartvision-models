@@ -1,0 +1,50 @@
+synthetic_domain/images/syn_0000.png	పారాసిటమాల్ 100 మి.గ్రా
+synthetic_domain/images/syn_0004.png	మెట్‌ఫార్మిన్ 250 మి.గ్రా
+synthetic_domain/images/syn_0008.png	ఉదయం మరియు రాత్రి
+synthetic_domain/images/syn_0012.png	పిల్లలకు దూరంగా ఉంచండి
+synthetic_domain/images/syn_0016.png	నిష్క్రమణ ద్వారం
+synthetic_domain/images/syn_0020.png	మొదటి అంతస్తు
+synthetic_domain/images/syn_0024.png	నిశ్శబ్దంగా ఉండండి
+synthetic_domain/images/syn_0028.png	दिन में दो बार
+synthetic_domain/images/syn_0032.png	दवाई की दुकान
+synthetic_domain/images/syn_0036.png	Dolo 650 Tablets
+synthetic_domain/images/syn_0040.png	Take 1 tablet after food
+synthetic_domain/images/syn_0044.png	Emergency Exit
+synthetic_domain/images/syn_0048.png	Restroom
+synthetic_domain/images/syn_0052.png	డోలో 1000 మాత్రలు
+synthetic_domain/images/syn_0056.png	ఆస్పిరిన్ 75 మి.గ్రా
+synthetic_domain/images/syn_0060.png	1 టాబ్లెట్ నీటితో
+synthetic_domain/images/syn_0064.png	చల్లని మరియు పొడి ప్రదేశంలో ఉంచండి
+synthetic_domain/images/syn_0068.png	ఆసుపత్రి
+synthetic_domain/images/syn_0072.png	లిఫ్ట్
+synthetic_domain/images/syn_0076.png	पैरासिटामोल 100 मि.ग्रा.
+synthetic_domain/images/syn_0080.png	भोजन के बाद लें
+synthetic_domain/images/syn_0084.png	अस्पताल
+synthetic_domain/images/syn_0088.png	Cetirizine 10 mg
+synthetic_domain/images/syn_0092.png	Twice daily morning & night
+synthetic_domain/images/syn_0096.png	Entrance Only
+synthetic_domain/images/syn_0100.png	Caution Wet Floor
+synthetic_domain/images/syn_0104.png	సిట్రిజిన్ 10 మి.గ్రా
+synthetic_domain/images/syn_0108.png	రోజుకు రెండు సార్లు
+synthetic_domain/images/syn_0112.png	కడుపు నిండా భోజనం తర్వాత
+synthetic_domain/images/syn_0116.png	అత్యవసర నిష్క్రమణ
+synthetic_domain/images/syn_0120.png	మందుల దుకాణం
+synthetic_domain/images/syn_0124.png	మెట్లు
+synthetic_domain/images/syn_0128.png	डोलो 650 गोलियाँ
+synthetic_domain/images/syn_0132.png	आपातकालीन निकास
+synthetic_domain/images/syn_0136.png	कृपया शांति बनाए रखें
+synthetic_domain/images/syn_0140.png	Amoxicillin 250 mg
+synthetic_domain/images/syn_0144.png	Keep out of reach of children
+synthetic_domain/images/syn_0148.png	Pharmacy
+synthetic_domain/images/syn_0152.png	Do Not Enter
+synthetic_domain/images/syn_0156.png	అమోక్సిసిలిన్ 250 మి.గ్రా
+synthetic_domain/images/syn_0160.png	భోజనం తర్వాత తీసుకోండి
+synthetic_domain/images/syn_0164.png	డాక్టర్ సలహా మేరకు మాత్రమే
+synthetic_domain/images/syn_0168.png	ప్రవేశ ద్వారం
+synthetic_domain/images/syn_0172.png	శౌచాలయం
+synthetic_domain/images/syn_0176.png	జాగ్రత్త: తడి నేల
+synthetic_domain/images/syn_0180.png	सिट्रिजिन 10 मि.ग्रा.
+synthetic_domain/images/syn_0184.png	प्रवेश द्वार
+synthetic_domain/images/syn_0188.png	Paracetamol 500 mg
+synthetic_domain/images/syn_0192.png	Metformin 500 mg
+synthetic_domain/images/syn_0196.png	Store in a cool dry place

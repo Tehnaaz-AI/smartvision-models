@@ -1,0 +1,3 @@
+# Optional CPU text-detection runtime for the DrugSticker detect-and-OCR command.
+paddleocr==3.7.0
+paddlepaddle==3.3.1

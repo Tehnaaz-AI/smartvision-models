@@ -1,83 +1,58 @@
-# Python environments and interpreter-specific files
-.venv/
-venv/
-env/
-.python-version
-pyvenv.cfg
-
-# Python caches, test output, and tool caches
-__pycache__/
+# Python environments and generated files
+**/.venv/
+**/venv/
+**/__pycache__/
 *.py[cod]
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
 
-# Secrets and local configuration
+# Local settings and credentials
 .env
-.env.*
-!.env.example
-secrets/
-**/secrets/
-credentials/
-**/credentials/
-*credentials*
-*secret*
-**/config.local.*
-*.token
-.pypirc
-*.pem
-*.key
-*.p12
-*.pfx
+**/.env
+!**/.env.example
 
-# Machine-specific editor settings
-.vscode/
-.idea/
+# Dataset images and annotations
+**/data/raw/**
+**/data/cropped/**
+**/data/processed/**
+**/data/labels/**
+**/data/evaluation/images/**
+!**/data/evaluation/images/.gitkeep
+**/data/evaluation/evaluation_results.csv
+**/data/evaluation/evaluation_report.json
+!**/data/**/.gitkeep
 
-# Local datasets, including synthetic and real cropped images
-/data/raw/*
-!/data/raw/.gitkeep
-/data/processed/*
-!/data/processed/.gitkeep
-/data/cropped/*
-!/data/cropped/.gitkeep
-/data/labels/*
-!/data/labels/.gitkeep
-/data/evaluation/images/*
-!/data/evaluation/images/.gitkeep
-*.dcm
+# Local medicine and benchmark image datasets — do not commit
+**/data/Medicine_data/
+**/data/DrugSticker_data/
+**/data/vignette-ocr/
+**/data/telugu_wikisource/images/
+**/data/telugu_wikisource/*.parquet
+**/data/evaluation/telugu_baseline_results.csv
 
-# Model checkpoints, downloaded weights, and Hugging Face caches
-/models/*
-!/models/checkpoints/
-!/models/final/
-/models/checkpoints/*
-!/models/checkpoints/.gitkeep
-/models/final/*
-!/models/final/.gitkeep
-.cache/
-**/.cache/huggingface/
-**/huggingface/hub/
-**/models--*/
+# Git backup directories
+**/.git_backup/
+**/.git_ocr_backup/
+**/.git_llm_backup/
+
+
+# Model weights, checkpoints, and training outputs
+**/models/**
+**/checkpoints/**
+**/final/**
+!**/models/
+!**/models/checkpoints/
+!**/models/final/
+!**/models/checkpoints/.gitkeep
+!**/models/final/.gitkeep
 *.pt
 *.pth
 *.bin
 *.safetensors
 *.onnx
 
-# Evaluation results, generated reports, logs, and temporary files
-/data/evaluation/evaluation_results.csv
-/data/evaluation/evaluation_report.json
-logs/
+# Logs and local editor files
+**/logs/
 *.log
-*.tmp
-*.temp
-*.bak
-
-# Operating-system files
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-.DS_Store
+.vscode/

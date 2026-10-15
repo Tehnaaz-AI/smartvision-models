@@ -1,0 +1,200 @@
+{"sample_id": "syn_0000", "image_path": "synthetic_domain/images/syn_0000.png", "text": "పారాసిటమాల్ 100 మి.గ్రా", "language": "te", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0001", "image_path": "synthetic_domain/images/syn_0001.png", "text": "డోలో 650 మాత్రలు", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0002", "image_path": "synthetic_domain/images/syn_0002.png", "text": "సిట్రిజిన్ 10 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0003", "image_path": "synthetic_domain/images/syn_0003.png", "text": "అమోక్సిసిలిన్ 250 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0004", "image_path": "synthetic_domain/images/syn_0004.png", "text": "మెట్‌ఫార్మిన్ 250 మి.గ్రా", "language": "te", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0005", "image_path": "synthetic_domain/images/syn_0005.png", "text": "ఆస్పిరిన్ 75 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0006", "image_path": "synthetic_domain/images/syn_0006.png", "text": "రోజుకు రెండు సార్లు", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0007", "image_path": "synthetic_domain/images/syn_0007.png", "text": "భోజనం తర్వాత తీసుకోండి", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0008", "image_path": "synthetic_domain/images/syn_0008.png", "text": "ఉదయం మరియు రాత్రి", "language": "te", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0009", "image_path": "synthetic_domain/images/syn_0009.png", "text": "1 టాబ్లెట్ నీటితో", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0010", "image_path": "synthetic_domain/images/syn_0010.png", "text": "కడుపు నిండా భోజనం తర్వాత", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0011", "image_path": "synthetic_domain/images/syn_0011.png", "text": "డాక్టర్ సలహా మేరకు మాత్రమే", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0012", "image_path": "synthetic_domain/images/syn_0012.png", "text": "పిల్లలకు దూరంగా ఉంచండి", "language": "te", "category": "instruction", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0013", "image_path": "synthetic_domain/images/syn_0013.png", "text": "చల్లని మరియు పొడి ప్రదేశంలో ఉంచండి", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0014", "image_path": "synthetic_domain/images/syn_0014.png", "text": "అత్యవసర నిష్క్రమణ", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0015", "image_path": "synthetic_domain/images/syn_0015.png", "text": "ప్రవేశ ద్వారం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0016", "image_path": "synthetic_domain/images/syn_0016.png", "text": "నిష్క్రమణ ద్వారం", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0017", "image_path": "synthetic_domain/images/syn_0017.png", "text": "ఆసుపత్రి", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0018", "image_path": "synthetic_domain/images/syn_0018.png", "text": "మందుల దుకాణం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0019", "image_path": "synthetic_domain/images/syn_0019.png", "text": "శౌచాలయం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0020", "image_path": "synthetic_domain/images/syn_0020.png", "text": "మొదటి అంతస్తు", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0021", "image_path": "synthetic_domain/images/syn_0021.png", "text": "లిఫ్ట్", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0022", "image_path": "synthetic_domain/images/syn_0022.png", "text": "మెట్లు", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0023", "image_path": "synthetic_domain/images/syn_0023.png", "text": "జాగ్రత్త: తడి నేల", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0024", "image_path": "synthetic_domain/images/syn_0024.png", "text": "నిశ్శబ్దంగా ఉండండి", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0025", "image_path": "synthetic_domain/images/syn_0025.png", "text": "पैरासिटामोल 100 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0026", "image_path": "synthetic_domain/images/syn_0026.png", "text": "डोलो 250 गोलियाँ", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0027", "image_path": "synthetic_domain/images/syn_0027.png", "text": "सिट्रिजिन 10 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0028", "image_path": "synthetic_domain/images/syn_0028.png", "text": "दिन में दो बार", "language": "hi", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0029", "image_path": "synthetic_domain/images/syn_0029.png", "text": "भोजन के बाद लें", "language": "hi", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0030", "image_path": "synthetic_domain/images/syn_0030.png", "text": "आपातकालीन निकास", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0031", "image_path": "synthetic_domain/images/syn_0031.png", "text": "प्रवेश द्वार", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0032", "image_path": "synthetic_domain/images/syn_0032.png", "text": "दवाई की दुकान", "language": "hi", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0033", "image_path": "synthetic_domain/images/syn_0033.png", "text": "अस्पताल", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0034", "image_path": "synthetic_domain/images/syn_0034.png", "text": "कृपया शांति बनाए रखें", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0035", "image_path": "synthetic_domain/images/syn_0035.png", "text": "Paracetamol 500 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0036", "image_path": "synthetic_domain/images/syn_0036.png", "text": "Dolo 650 Tablets", "language": "en", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0037", "image_path": "synthetic_domain/images/syn_0037.png", "text": "Cetirizine 10 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0038", "image_path": "synthetic_domain/images/syn_0038.png", "text": "Amoxicillin 250 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0039", "image_path": "synthetic_domain/images/syn_0039.png", "text": "Metformin 1000 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0040", "image_path": "synthetic_domain/images/syn_0040.png", "text": "Take 1 tablet after food", "language": "en", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0041", "image_path": "synthetic_domain/images/syn_0041.png", "text": "Twice daily morning & night", "language": "en", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0042", "image_path": "synthetic_domain/images/syn_0042.png", "text": "Keep out of reach of children", "language": "en", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0043", "image_path": "synthetic_domain/images/syn_0043.png", "text": "Store in a cool dry place", "language": "en", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0044", "image_path": "synthetic_domain/images/syn_0044.png", "text": "Emergency Exit", "language": "en", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0045", "image_path": "synthetic_domain/images/syn_0045.png", "text": "Entrance Only", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0046", "image_path": "synthetic_domain/images/syn_0046.png", "text": "Pharmacy", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0047", "image_path": "synthetic_domain/images/syn_0047.png", "text": "Hospital Reception", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0048", "image_path": "synthetic_domain/images/syn_0048.png", "text": "Restroom", "language": "en", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0049", "image_path": "synthetic_domain/images/syn_0049.png", "text": "Caution Wet Floor", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0050", "image_path": "synthetic_domain/images/syn_0050.png", "text": "Do Not Enter", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0051", "image_path": "synthetic_domain/images/syn_0051.png", "text": "పారాసిటమాల్ 650 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0052", "image_path": "synthetic_domain/images/syn_0052.png", "text": "డోలో 1000 మాత్రలు", "language": "te", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0053", "image_path": "synthetic_domain/images/syn_0053.png", "text": "సిట్రిజిన్ 10 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0054", "image_path": "synthetic_domain/images/syn_0054.png", "text": "అమోక్సిసిలిన్ 250 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0055", "image_path": "synthetic_domain/images/syn_0055.png", "text": "మెట్‌ఫార్మిన్ 500 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0056", "image_path": "synthetic_domain/images/syn_0056.png", "text": "ఆస్పిరిన్ 75 మి.గ్రా", "language": "te", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0057", "image_path": "synthetic_domain/images/syn_0057.png", "text": "రోజుకు రెండు సార్లు", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0058", "image_path": "synthetic_domain/images/syn_0058.png", "text": "భోజనం తర్వాత తీసుకోండి", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0059", "image_path": "synthetic_domain/images/syn_0059.png", "text": "ఉదయం మరియు రాత్రి", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0060", "image_path": "synthetic_domain/images/syn_0060.png", "text": "1 టాబ్లెట్ నీటితో", "language": "te", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0061", "image_path": "synthetic_domain/images/syn_0061.png", "text": "కడుపు నిండా భోజనం తర్వాత", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0062", "image_path": "synthetic_domain/images/syn_0062.png", "text": "డాక్టర్ సలహా మేరకు మాత్రమే", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0063", "image_path": "synthetic_domain/images/syn_0063.png", "text": "పిల్లలకు దూరంగా ఉంచండి", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0064", "image_path": "synthetic_domain/images/syn_0064.png", "text": "చల్లని మరియు పొడి ప్రదేశంలో ఉంచండి", "language": "te", "category": "instruction", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0065", "image_path": "synthetic_domain/images/syn_0065.png", "text": "అత్యవసర నిష్క్రమణ", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0066", "image_path": "synthetic_domain/images/syn_0066.png", "text": "ప్రవేశ ద్వారం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0067", "image_path": "synthetic_domain/images/syn_0067.png", "text": "నిష్క్రమణ ద్వారం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0068", "image_path": "synthetic_domain/images/syn_0068.png", "text": "ఆసుపత్రి", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0069", "image_path": "synthetic_domain/images/syn_0069.png", "text": "మందుల దుకాణం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0070", "image_path": "synthetic_domain/images/syn_0070.png", "text": "శౌచాలయం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0071", "image_path": "synthetic_domain/images/syn_0071.png", "text": "మొదటి అంతస్తు", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0072", "image_path": "synthetic_domain/images/syn_0072.png", "text": "లిఫ్ట్", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0073", "image_path": "synthetic_domain/images/syn_0073.png", "text": "మెట్లు", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0074", "image_path": "synthetic_domain/images/syn_0074.png", "text": "జాగ్రత్త: తడి నేల", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0075", "image_path": "synthetic_domain/images/syn_0075.png", "text": "నిశ్శబ్దంగా ఉండండి", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0076", "image_path": "synthetic_domain/images/syn_0076.png", "text": "पैरासिटामोल 100 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0077", "image_path": "synthetic_domain/images/syn_0077.png", "text": "डोलो 250 गोलियाँ", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0078", "image_path": "synthetic_domain/images/syn_0078.png", "text": "सिट्रिजिन 10 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0079", "image_path": "synthetic_domain/images/syn_0079.png", "text": "दिन में दो बार", "language": "hi", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0080", "image_path": "synthetic_domain/images/syn_0080.png", "text": "भोजन के बाद लें", "language": "hi", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0081", "image_path": "synthetic_domain/images/syn_0081.png", "text": "आपातकालीन निकास", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0082", "image_path": "synthetic_domain/images/syn_0082.png", "text": "प्रवेश द्वार", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0083", "image_path": "synthetic_domain/images/syn_0083.png", "text": "दवाई की दुकान", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0084", "image_path": "synthetic_domain/images/syn_0084.png", "text": "अस्पताल", "language": "hi", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0085", "image_path": "synthetic_domain/images/syn_0085.png", "text": "कृपया शांति बनाए रखें", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0086", "image_path": "synthetic_domain/images/syn_0086.png", "text": "Paracetamol 500 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0087", "image_path": "synthetic_domain/images/syn_0087.png", "text": "Dolo 650 Tablets", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0088", "image_path": "synthetic_domain/images/syn_0088.png", "text": "Cetirizine 10 mg", "language": "en", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0089", "image_path": "synthetic_domain/images/syn_0089.png", "text": "Amoxicillin 250 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0090", "image_path": "synthetic_domain/images/syn_0090.png", "text": "Metformin 1000 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0091", "image_path": "synthetic_domain/images/syn_0091.png", "text": "Take 1 tablet after food", "language": "en", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0092", "image_path": "synthetic_domain/images/syn_0092.png", "text": "Twice daily morning & night", "language": "en", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0093", "image_path": "synthetic_domain/images/syn_0093.png", "text": "Keep out of reach of children", "language": "en", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0094", "image_path": "synthetic_domain/images/syn_0094.png", "text": "Store in a cool dry place", "language": "en", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0095", "image_path": "synthetic_domain/images/syn_0095.png", "text": "Emergency Exit", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0096", "image_path": "synthetic_domain/images/syn_0096.png", "text": "Entrance Only", "language": "en", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0097", "image_path": "synthetic_domain/images/syn_0097.png", "text": "Pharmacy", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0098", "image_path": "synthetic_domain/images/syn_0098.png", "text": "Hospital Reception", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0099", "image_path": "synthetic_domain/images/syn_0099.png", "text": "Restroom", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0100", "image_path": "synthetic_domain/images/syn_0100.png", "text": "Caution Wet Floor", "language": "en", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0101", "image_path": "synthetic_domain/images/syn_0101.png", "text": "Do Not Enter", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0102", "image_path": "synthetic_domain/images/syn_0102.png", "text": "పారాసిటమాల్ 500 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0103", "image_path": "synthetic_domain/images/syn_0103.png", "text": "డోలో 650 మాత్రలు", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0104", "image_path": "synthetic_domain/images/syn_0104.png", "text": "సిట్రిజిన్ 10 మి.గ్రా", "language": "te", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0105", "image_path": "synthetic_domain/images/syn_0105.png", "text": "అమోక్సిసిలిన్ 250 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0106", "image_path": "synthetic_domain/images/syn_0106.png", "text": "మెట్‌ఫార్మిన్ 500 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0107", "image_path": "synthetic_domain/images/syn_0107.png", "text": "ఆస్పిరిన్ 75 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0108", "image_path": "synthetic_domain/images/syn_0108.png", "text": "రోజుకు రెండు సార్లు", "language": "te", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0109", "image_path": "synthetic_domain/images/syn_0109.png", "text": "భోజనం తర్వాత తీసుకోండి", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0110", "image_path": "synthetic_domain/images/syn_0110.png", "text": "ఉదయం మరియు రాత్రి", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0111", "image_path": "synthetic_domain/images/syn_0111.png", "text": "1 టాబ్లెట్ నీటితో", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0112", "image_path": "synthetic_domain/images/syn_0112.png", "text": "కడుపు నిండా భోజనం తర్వాత", "language": "te", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0113", "image_path": "synthetic_domain/images/syn_0113.png", "text": "డాక్టర్ సలహా మేరకు మాత్రమే", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0114", "image_path": "synthetic_domain/images/syn_0114.png", "text": "పిల్లలకు దూరంగా ఉంచండి", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0115", "image_path": "synthetic_domain/images/syn_0115.png", "text": "చల్లని మరియు పొడి ప్రదేశంలో ఉంచండి", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0116", "image_path": "synthetic_domain/images/syn_0116.png", "text": "అత్యవసర నిష్క్రమణ", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0117", "image_path": "synthetic_domain/images/syn_0117.png", "text": "ప్రవేశ ద్వారం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0118", "image_path": "synthetic_domain/images/syn_0118.png", "text": "నిష్క్రమణ ద్వారం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0119", "image_path": "synthetic_domain/images/syn_0119.png", "text": "ఆసుపత్రి", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0120", "image_path": "synthetic_domain/images/syn_0120.png", "text": "మందుల దుకాణం", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0121", "image_path": "synthetic_domain/images/syn_0121.png", "text": "శౌచాలయం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0122", "image_path": "synthetic_domain/images/syn_0122.png", "text": "మొదటి అంతస్తు", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0123", "image_path": "synthetic_domain/images/syn_0123.png", "text": "లిఫ్ట్", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0124", "image_path": "synthetic_domain/images/syn_0124.png", "text": "మెట్లు", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0125", "image_path": "synthetic_domain/images/syn_0125.png", "text": "జాగ్రత్త: తడి నేల", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0126", "image_path": "synthetic_domain/images/syn_0126.png", "text": "నిశ్శబ్దంగా ఉండండి", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0127", "image_path": "synthetic_domain/images/syn_0127.png", "text": "पैरासिटामोल 500 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0128", "image_path": "synthetic_domain/images/syn_0128.png", "text": "डोलो 650 गोलियाँ", "language": "hi", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0129", "image_path": "synthetic_domain/images/syn_0129.png", "text": "सिट्रिजिन 10 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0130", "image_path": "synthetic_domain/images/syn_0130.png", "text": "दिन में दो बार", "language": "hi", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0131", "image_path": "synthetic_domain/images/syn_0131.png", "text": "भोजन के बाद लें", "language": "hi", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0132", "image_path": "synthetic_domain/images/syn_0132.png", "text": "आपातकालीन निकास", "language": "hi", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0133", "image_path": "synthetic_domain/images/syn_0133.png", "text": "प्रवेश द्वार", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0134", "image_path": "synthetic_domain/images/syn_0134.png", "text": "दवाई की दुकान", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0135", "image_path": "synthetic_domain/images/syn_0135.png", "text": "अस्पताल", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0136", "image_path": "synthetic_domain/images/syn_0136.png", "text": "कृपया शांति बनाए रखें", "language": "hi", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0137", "image_path": "synthetic_domain/images/syn_0137.png", "text": "Paracetamol 100 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0138", "image_path": "synthetic_domain/images/syn_0138.png", "text": "Dolo 650 Tablets", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0139", "image_path": "synthetic_domain/images/syn_0139.png", "text": "Cetirizine 10 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0140", "image_path": "synthetic_domain/images/syn_0140.png", "text": "Amoxicillin 250 mg", "language": "en", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0141", "image_path": "synthetic_domain/images/syn_0141.png", "text": "Metformin 500 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0142", "image_path": "synthetic_domain/images/syn_0142.png", "text": "Take 1 tablet after food", "language": "en", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0143", "image_path": "synthetic_domain/images/syn_0143.png", "text": "Twice daily morning & night", "language": "en", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0144", "image_path": "synthetic_domain/images/syn_0144.png", "text": "Keep out of reach of children", "language": "en", "category": "instruction", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0145", "image_path": "synthetic_domain/images/syn_0145.png", "text": "Store in a cool dry place", "language": "en", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0146", "image_path": "synthetic_domain/images/syn_0146.png", "text": "Emergency Exit", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0147", "image_path": "synthetic_domain/images/syn_0147.png", "text": "Entrance Only", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0148", "image_path": "synthetic_domain/images/syn_0148.png", "text": "Pharmacy", "language": "en", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0149", "image_path": "synthetic_domain/images/syn_0149.png", "text": "Hospital Reception", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0150", "image_path": "synthetic_domain/images/syn_0150.png", "text": "Restroom", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0151", "image_path": "synthetic_domain/images/syn_0151.png", "text": "Caution Wet Floor", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0152", "image_path": "synthetic_domain/images/syn_0152.png", "text": "Do Not Enter", "language": "en", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0153", "image_path": "synthetic_domain/images/syn_0153.png", "text": "పారాసిటమాల్ 500 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0154", "image_path": "synthetic_domain/images/syn_0154.png", "text": "డోలో 100 మాత్రలు", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0155", "image_path": "synthetic_domain/images/syn_0155.png", "text": "సిట్రిజిన్ 10 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0156", "image_path": "synthetic_domain/images/syn_0156.png", "text": "అమోక్సిసిలిన్ 250 మి.గ్రా", "language": "te", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0157", "image_path": "synthetic_domain/images/syn_0157.png", "text": "మెట్‌ఫార్మిన్ 500 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0158", "image_path": "synthetic_domain/images/syn_0158.png", "text": "ఆస్పిరిన్ 75 మి.గ్రా", "language": "te", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0159", "image_path": "synthetic_domain/images/syn_0159.png", "text": "రోజుకు రెండు సార్లు", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0160", "image_path": "synthetic_domain/images/syn_0160.png", "text": "భోజనం తర్వాత తీసుకోండి", "language": "te", "category": "dosage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0161", "image_path": "synthetic_domain/images/syn_0161.png", "text": "ఉదయం మరియు రాత్రి", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0162", "image_path": "synthetic_domain/images/syn_0162.png", "text": "1 టాబ్లెట్ నీటితో", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0163", "image_path": "synthetic_domain/images/syn_0163.png", "text": "కడుపు నిండా భోజనం తర్వాత", "language": "te", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0164", "image_path": "synthetic_domain/images/syn_0164.png", "text": "డాక్టర్ సలహా మేరకు మాత్రమే", "language": "te", "category": "instruction", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0165", "image_path": "synthetic_domain/images/syn_0165.png", "text": "పిల్లలకు దూరంగా ఉంచండి", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0166", "image_path": "synthetic_domain/images/syn_0166.png", "text": "చల్లని మరియు పొడి ప్రదేశంలో ఉంచండి", "language": "te", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0167", "image_path": "synthetic_domain/images/syn_0167.png", "text": "అత్యవసర నిష్క్రమణ", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0168", "image_path": "synthetic_domain/images/syn_0168.png", "text": "ప్రవేశ ద్వారం", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0169", "image_path": "synthetic_domain/images/syn_0169.png", "text": "నిష్క్రమణ ద్వారం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0170", "image_path": "synthetic_domain/images/syn_0170.png", "text": "ఆసుపత్రి", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0171", "image_path": "synthetic_domain/images/syn_0171.png", "text": "మందుల దుకాణం", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0172", "image_path": "synthetic_domain/images/syn_0172.png", "text": "శౌచాలయం", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0173", "image_path": "synthetic_domain/images/syn_0173.png", "text": "మొదటి అంతస్తు", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0174", "image_path": "synthetic_domain/images/syn_0174.png", "text": "లిఫ్ట్", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0175", "image_path": "synthetic_domain/images/syn_0175.png", "text": "మెట్లు", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0176", "image_path": "synthetic_domain/images/syn_0176.png", "text": "జాగ్రత్త: తడి నేల", "language": "te", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0177", "image_path": "synthetic_domain/images/syn_0177.png", "text": "నిశ్శబ్దంగా ఉండండి", "language": "te", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0178", "image_path": "synthetic_domain/images/syn_0178.png", "text": "पैरासिटामोल 650 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0179", "image_path": "synthetic_domain/images/syn_0179.png", "text": "डोलो 250 गोलियाँ", "language": "hi", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0180", "image_path": "synthetic_domain/images/syn_0180.png", "text": "सिट्रिजिन 10 मि.ग्रा.", "language": "hi", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0181", "image_path": "synthetic_domain/images/syn_0181.png", "text": "दिन में दो बार", "language": "hi", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0182", "image_path": "synthetic_domain/images/syn_0182.png", "text": "भोजन के बाद लें", "language": "hi", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0183", "image_path": "synthetic_domain/images/syn_0183.png", "text": "आपातकालीन निकास", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0184", "image_path": "synthetic_domain/images/syn_0184.png", "text": "प्रवेश द्वार", "language": "hi", "category": "signage", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0185", "image_path": "synthetic_domain/images/syn_0185.png", "text": "दवाई की दुकान", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0186", "image_path": "synthetic_domain/images/syn_0186.png", "text": "अस्पताल", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0187", "image_path": "synthetic_domain/images/syn_0187.png", "text": "कृपया शांति बनाए रखें", "language": "hi", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0188", "image_path": "synthetic_domain/images/syn_0188.png", "text": "Paracetamol 500 mg", "language": "en", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0189", "image_path": "synthetic_domain/images/syn_0189.png", "text": "Dolo 650 Tablets", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0190", "image_path": "synthetic_domain/images/syn_0190.png", "text": "Cetirizine 10 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0191", "image_path": "synthetic_domain/images/syn_0191.png", "text": "Amoxicillin 250 mg", "language": "en", "category": "medicine", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0192", "image_path": "synthetic_domain/images/syn_0192.png", "text": "Metformin 500 mg", "language": "en", "category": "medicine", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0193", "image_path": "synthetic_domain/images/syn_0193.png", "text": "Take 1 tablet after food", "language": "en", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0194", "image_path": "synthetic_domain/images/syn_0194.png", "text": "Twice daily morning & night", "language": "en", "category": "dosage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0195", "image_path": "synthetic_domain/images/syn_0195.png", "text": "Keep out of reach of children", "language": "en", "category": "instruction", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0196", "image_path": "synthetic_domain/images/syn_0196.png", "text": "Store in a cool dry place", "language": "en", "category": "instruction", "split": "test", "origin": "synthetic"}
+{"sample_id": "syn_0197", "image_path": "synthetic_domain/images/syn_0197.png", "text": "Emergency Exit", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0198", "image_path": "synthetic_domain/images/syn_0198.png", "text": "Entrance Only", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
+{"sample_id": "syn_0199", "image_path": "synthetic_domain/images/syn_0199.png", "text": "Pharmacy", "language": "en", "category": "signage", "split": "train", "origin": "synthetic"}
