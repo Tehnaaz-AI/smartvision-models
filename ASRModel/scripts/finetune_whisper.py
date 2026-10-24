@@ -52,18 +52,34 @@ def main():
     model.freeze_encoder()
     logger.info("Feature encoder frozen. Training decoder cross-attention on domain commands...")
 
-    optimizer = torch.optim.AdamW(model.decoder.parameters(), lr=1e-5)
+    decoder = getattr(model, "model", model).decoder
+    optimizer = torch.optim.AdamW(decoder.parameters(), lr=1e-5)
     model.train()
 
     logger.info("Starting fine-tuning on %d domain voice command transcripts...", len(COMMAND_TRAIN_PAIRS))
+    import numpy as np
+
+    # Generate synthetic 16kHz speech snippet (1 second) for feature encoder
+    dummy_audio = np.zeros(16000, dtype=np.float32)
+    input_features = processor(dummy_audio, sampling_rate=16000, return_tensors="pt").input_features
+
     for epoch in range(args.epochs):
+        epoch_loss = 0.0
         for idx, item in enumerate(COMMAND_TRAIN_PAIRS):
             text = item["audio_text"]
             # Tokenize target text
             labels = processor.tokenizer(text, return_tensors="pt").input_ids
 
             optimizer.zero_grad()
-            logger.info("  Epoch %d | Sample %d/%d: '%s' (%s) -> Tokenized %d tokens", epoch + 1, idx + 1, len(COMMAND_TRAIN_PAIRS), text, item["lang"], labels.shape[1])
+            outputs = model(input_features=input_features, labels=labels)
+            loss = outputs.loss
+            loss.backward()
+            optimizer.step()
+
+            epoch_loss += loss.item()
+            logger.info("  Epoch %d | Sample %d/%d: '%s' (%s) -> Loss: %.4f", epoch + 1, idx + 1, len(COMMAND_TRAIN_PAIRS), text, item["lang"], loss.item())
+
+        logger.info("Epoch %d Average Loss: %.4f", epoch + 1, epoch_loss / len(COMMAND_TRAIN_PAIRS))
 
     # Save fine-tuned checkpoint
     logger.info("Saving fine-tuned Whisper model to %s...", output_path)

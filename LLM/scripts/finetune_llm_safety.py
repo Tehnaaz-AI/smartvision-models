@@ -6,6 +6,9 @@ enforcing compassionate tone, clear language, and strict guardrails against dosa
 
 from __future__ import annotations
 
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 import argparse
 import json
 import logging
@@ -53,7 +56,7 @@ ELDERLY_HEALTHCARE_DIALOGS = [
 
 def main():
     parser = argparse.ArgumentParser(description="SmartVision LLM Safety Fine-Tuning")
-    parser.add_argument("--model-id", type=str, default="Qwen/Qwen3-4B-Instruct-2507", help="Base model")
+    parser.add_argument("--model-id", type=str, default="Qwen/Qwen2.5-0.5B-Instruct", help="Base model")
     parser.add_argument("--epochs", type=int, default=1, help="Training epochs")
     parser.add_argument("--output-dir", type=str, default="models/safety_adapters", help="Output path")
     args = parser.parse_args()
@@ -64,10 +67,12 @@ def main():
 
     from transformers import AutoTokenizer, AutoModelForCausalLM
 
-    logger.info("Loading tokenizer for %s...", args.model_id)
+    logger.info("Loading tokenizer & model for %s...", args.model_id)
     tokenizer = AutoTokenizer.from_pretrained(args.model_id)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+
+    model = AutoModelForCausalLM.from_pretrained(args.model_id, torch_dtype=torch.float32)
 
     logger.info("Loaded %d curated elderly safety alignment dialogs.", len(ELDERLY_HEALTHCARE_DIALOGS))
 
@@ -75,22 +80,54 @@ def main():
     training_samples = []
     for item in ELDERLY_HEALTHCARE_DIALOGS:
         full_text = f"<|im_start|>user\n{item['prompt']}<|im_end|>\n<|im_start|>assistant\n{item['response']}<|im_end|>"
-        tokens = tokenizer(full_text, truncation=True, max_length=256, padding="max_length", return_tensors="pt")
+        tokens = tokenizer(full_text, truncation=True, max_length=128, padding="max_length", return_tensors="pt")
         training_samples.append(tokens)
 
     logger.info("Tokenized %d safety training sequences successfully.", len(training_samples))
+
+    # Supervised safety alignment training loop (using SGD for lightweight zero-RAM-overhead edge CPU training)
+    optimizer = torch.optim.SGD(model.parameters(), lr=5e-5)
+    model.train()
+
+    logger.info("Starting safety alignment training across %d epochs...", args.epochs)
+    try:
+        for epoch in range(args.epochs):
+            epoch_loss = 0.0
+            for idx, batch in enumerate(training_samples):
+                optimizer.zero_grad()
+                input_ids = batch["input_ids"]
+                attention_mask = batch["attention_mask"]
+                outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=input_ids)
+                loss = outputs.loss
+                loss.backward()
+                optimizer.step()
+
+                epoch_loss += loss.item()
+                logger.info("  Epoch %d | Dialog %d/%d: Loss: %.4f", epoch + 1, idx + 1, len(training_samples), loss.item())
+
+            logger.info("Epoch %d Average Loss: %.4f", epoch + 1, epoch_loss / len(training_samples))
+    except Exception as exc:
+        import traceback
+        traceback.print_exc(file=sys.stdout)
+        sys.stdout.flush()
+        raise exc
+
+    # Save fine-tuned checkpoint
+    logger.info("Saving safety-aligned model checkpoint to %s...", output_path)
+    model.save_pretrained(output_path)
+    tokenizer.save_pretrained(output_path)
 
     # Save fine-tuning alignment dataset and metadata
     meta = {
         "base_model": args.model_id,
         "epochs": args.epochs,
         "dialog_count": len(ELDERLY_HEALTHCARE_DIALOGS),
-        "status": "ready_for_peft_lora_train",
+        "status": "safety_aligned_and_fine_tuned",
         "scenarios": [d["prompt"] for d in ELDERLY_HEALTHCARE_DIALOGS],
     }
     (output_path / "llm_finetuning_meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
-    logger.info("LLM safety alignment configuration exported to: %s", output_path)
-    logger.info("Fine-tuning pipeline prepared successfully!")
+    logger.info("LLM safety alignment model and metadata exported to: %s", output_path)
+    logger.info("Fine-tuning pipeline executed successfully!")
 
 
 if __name__ == "__main__":

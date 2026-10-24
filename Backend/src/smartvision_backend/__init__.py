@@ -14,6 +14,13 @@ from .models import (
 from .verifier import MedicationVerifier, get_verifier
 from .scheduler import MedicationScheduler, get_scheduler
 from .cloud_db import CloudDatabaseClient, get_cloud_db_client
+from .alerts import (
+    AlertDispatcher,
+    EmergencyAlert,
+    AlertType,
+    AlertSeverity,
+    get_alert_dispatcher,
+)
 
 __all__ = [
     "Patient",
@@ -27,4 +34,9 @@ __all__ = [
     "get_scheduler",
     "CloudDatabaseClient",
     "get_cloud_db_client",
+    "AlertDispatcher",
+    "EmergencyAlert",
+    "AlertType",
+    "AlertSeverity",
+    "get_alert_dispatcher",
 ]

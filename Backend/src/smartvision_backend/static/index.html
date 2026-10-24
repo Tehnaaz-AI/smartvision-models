@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SmartVision Caregiver Portal - Real-time medication verification monitoring, prescription management, and emergency alerts for assistive smart glasses.">
+  <title>SmartVision | Caregiver & Tele-Health Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark-theme">
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="6" cy="12" r="4"/>
+          <circle cx="18" cy="12" r="4"/>
+          <path d="M10 12h4"/>
+          <path d="M2 12a10 10 0 0 1 20 0"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">SmartVision <span>Caregiver</span></h1>
+        <p class="brand-sub">Assistive Smart Glasses Tele-Health Monitor</p>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Badges -->
+    <div class="telemetry-bar">
+      <div class="telemetry-chip chip-online">
+        <span class="status-dot pulse-green"></span>
+        <span id="device-status">Glasses Online</span>
+      </div>
+      <div class="telemetry-chip">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="16" height="10" rx="2"/><line x1="22" y1="11" x2="22" y2="13"/></svg>
+        <span id="battery-level">84% Battery</span>
+      </div>
+      <div class="telemetry-chip">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+        <span id="temple-temp">29.4°C (Normal)</span>
+      </div>
+      <div class="telemetry-chip chip-cloud">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+        <span>Cloud Synced</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Portal Layout -->
+  <main class="portal-grid">
+    <!-- Left Column: Patient Profile & Prescription Authoring -->
+    <section class="portal-card patient-card">
+      <div class="card-header">
+        <div class="header-icon user-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <h2>Patient Profile</h2>
+          <p class="subtitle" id="patient-name-display">Lakshmi Devi (Age 72)</p>
+        </div>
+        <span class="badge badge-accent">Trilingual (TE/HI/EN)</span>
+      </div>
+
+      <div class="patient-quick-info">
+        <div class="info-item">
+          <span class="label">Patient ID</span>
+          <span class="value mono">PAT-94021</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Caregiver Contact</span>
+          <span class="value mono">+91-9876543210</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Preferred Audio</span>
+          <span class="value">తెలుగు (Telugu)</span>
+        </div>
+      </div>
+
+      <!-- Prescriptions Section -->
+      <div class="section-title-row">
+        <h3>Active Prescriptions (<span id="prescriptions-count">3</span>)</h3>
+        <button id="btn-add-med" class="btn btn-secondary btn-sm">+ Add Medicine</button>
+      </div>
+
+      <div class="prescriptions-list" id="prescriptions-list">
+        <!-- Injected dynamically via JS -->
+      </div>
+
+      <!-- New Prescription Modal / Drawer Form -->
+      <div id="modal-add-med" class="modal-form hidden">
+        <h4>Add Medication to Prescription</h4>
+        <form id="form-add-med">
+          <div class="form-row">
+            <label>Medicine Name</label>
+            <input type="text" id="input-med-name" placeholder="e.g. Dolo, Metformin" required>
+          </div>
+          <div class="form-row form-grid-2">
+            <div>
+              <label>Strength</label>
+              <input type="text" id="input-med-strength" placeholder="e.g. 650 mg" required>
+            </div>
+            <div>
+              <label>Dosage</label>
+              <input type="text" id="input-med-dose" placeholder="e.g. 1 Tablet" required>
+            </div>
+          </div>
+          <div class="form-row form-grid-2">
+            <div>
+              <label>Schedule Time</label>
+              <input type="text" id="input-med-time" placeholder="e.g. 08:00 AM" required>
+            </div>
+            <div>
+              <label>Meal Relation</label>
+              <select id="input-med-meal">
+                <option value="AFTER_FOOD">After Food</option>
+                <option value="BEFORE_FOOD">Before Food</option>
+                <option value="WITH_FOOD">With Food</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Instructions (English)</label>
+            <input type="text" id="input-med-inst-en" placeholder="Take one tablet after breakfast with water" required>
+          </div>
+          <div class="form-row">
+            <label>Instructions (Telugu)</label>
+            <input type="text" id="input-med-inst-te" placeholder="అల్పాహారం తర్వాత ఒక టాబ్లెట్ నీటితో వేసుకోండి" required>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="btn-cancel-med" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save to Cloud DB</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Center Column: Real-Time Medication Verification Feed -->
+    <section class="portal-card live-feed-card">
+      <div class="card-header">
+        <div class="header-icon camera-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div>
+          <h2>Smart Glasses Live Verifications</h2>
+          <p class="subtitle">Real-time medication pill-checks and audio responses</p>
+        </div>
+        <button id="btn-simulate-scan" class="btn btn-primary btn-sm">Simulate Glasses Scan</button>
+      </div>
+
+      <!-- Quick Stats KPI Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-num green" id="stat-verified-count">18</span>
+          <span class="kpi-label">Safe Verifications</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-num red" id="stat-warning-count">2</span>
+          <span class="kpi-label">Unsafe Interventions</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-num cyan" id="stat-accuracy">98.4%</span>
+          <span class="kpi-label">OCR & AI Confidence</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-num amber" id="stat-adherence">100%</span>
+          <span class="kpi-label">Daily Adherence</span>
+        </div>
+      </div>
+
+      <!-- Verification Feed List -->
+      <div class="timeline-container">
+        <h3>Live Activity Stream</h3>
+        <div class="timeline" id="verification-timeline">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Emergency Alerts & HUD Lens Preview -->
+    <section class="portal-card hud-alert-card">
+      <div class="card-header">
+        <div class="header-icon alert-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <h2>Emergency Center</h2>
+          <p class="subtitle">Caregiver WhatsApp & SMS triggers</p>
+        </div>
+      </div>
+
+      <!-- Active Alerts Box -->
+      <div class="alerts-container" id="alerts-container">
+        <!-- Dynamically populated -->
+      </div>
+
+      <!-- On-Lens HUD Simulation Card -->
+      <div class="hud-simulator-box">
+        <div class="hud-title-row">
+          <h4>Smart Glasses On-Lens HUD View</h4>
+          <span class="tag-hud">Micro-OLED SPI (128x64)</span>
+        </div>
+        <div class="hud-screen" id="hud-screen">
+          <div class="hud-header-bar">
+            <span id="hud-status-badge">[OK - SAFE]</span>
+            <span class="hud-right">BAT:84% WF</span>
+          </div>
+          <div class="hud-title" id="hud-title">VERIFIED SAFE</div>
+          <div class="hud-main" id="hud-main">&gt; DOLO 650</div>
+          <div class="hud-sub" id="hud-sub">Take 1 tablet after food</div>
+        </div>
+        <p class="hud-caption">Wearable Optical View: Projected into user's right eye prism with green high-visibility OLED phosphor.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
