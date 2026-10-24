@@ -53,19 +53,30 @@ class TTSEngine:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self._backend = self._init_backend()
 
+    HF_MODEL_MAP = {
+        "te": "facebook/mms-tts-tel",
+        "hi": "facebook/mms-tts-hin",
+        "en": "facebook/mms-tts-eng",
+    }
+
     def _init_backend(self) -> str:
         """Determines the best available synthesis backend."""
         try:
-            import pyttsx3  # noqa: F401
-            return "pyttsx3"
+            import transformers  # noqa: F401
+            return "hf_mms"
         except ImportError:
-            return "fallback"
+            try:
+                import pyttsx3  # noqa: F401
+                return "pyttsx3"
+            except ImportError:
+                return "fallback"
 
     def synthesize(
         self,
         text: str,
         output_filename: Optional[str] = None,
         language: Optional[str] = None,
+        prefer_hf: bool = False,
     ) -> TTSResult:
         """Synthesize text into a voice audio file."""
         if not text or not text.strip():
@@ -89,14 +100,54 @@ class TTSEngine:
         filename = output_filename or f"tts_{lang}_{abs(hash(clean_text)) % 100000}.wav"
         output_path = self.output_dir / filename
 
-        # Attempt synthesis with available backends
-        if self._backend == "pyttsx3":
+        # 1. Attempt Hugging Face Meta MMS VITS if preferred or available
+        if prefer_hf or self._backend == "hf_mms":
             try:
-                return self._synthesize_pyttsx3(clean_text, str(output_path), lang)
-            except Exception as e:
-                logger.warning(f"pyttsx3 failed: {e}. Falling back to audio generator.")
+                hf_res = self._synthesize_hf_mms(clean_text, str(output_path), lang)
+                if hf_res.success:
+                    return hf_res
+            except Exception as err:
+                logger.debug(f"HF MMS synthesis skipped/failed: {err}. Falling back to system TTS.")
 
+        # 2. Attempt pyttsx3 system TTS
+        try:
+            return self._synthesize_pyttsx3(clean_text, str(output_path), lang)
+        except Exception as e:
+            logger.debug(f"pyttsx3 failed: {e}. Falling back to audio generator.")
+
+        # 3. Deterministic WAV generator fallback
         return self._synthesize_fallback(clean_text, str(output_path), lang)
+
+    def _synthesize_hf_mms(self, text: str, output_path: str, lang: str) -> TTSResult:
+        """Synthesizes high-fidelity neural speech using Hugging Face Meta MMS VITS."""
+        import torch
+        from transformers import AutoTokenizer, VitsModel
+        import scipy.io.wavfile as wavfile
+
+        model_name = self.HF_MODEL_MAP.get(lang, "facebook/mms-tts-eng")
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = VitsModel.from_pretrained(model_name)
+        model.eval()
+
+        inputs = tokenizer(text, return_tensors="pt")
+        with torch.no_grad():
+            output = model(**inputs).waveform
+
+        waveform = output[0].cpu().numpy()
+        sample_rate = model.config.sampling_rate
+
+        # Write WAV file
+        wavfile.write(output_path, rate=sample_rate, data=waveform)
+        duration = len(waveform) / float(sample_rate)
+
+        return TTSResult(
+            text=text,
+            language=lang,
+            audio_path=output_path,
+            duration_seconds=round(duration, 2),
+            engine_name=f"hf_{model_name.split('/')[-1]}",
+            success=True,
+        )
 
     def _synthesize_pyttsx3(self, text: str, output_path: str, lang: str) -> TTSResult:
         """Synthesizes audio using pyttsx3."""

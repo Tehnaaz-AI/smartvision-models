@@ -1,11 +1,12 @@
 """CLI Demonstration script for VisionModel Package Detection."""
 
 from __future__ import annotations
-
 import argparse
 import sys
 from pathlib import Path
+# pyrefly: ignore [missing-import]
 import cv2
+# pyrefly: ignore [missing-import]
 import numpy as np
 
 # Add src to path

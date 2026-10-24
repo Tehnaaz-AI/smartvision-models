@@ -13,6 +13,7 @@ from .models import (
 )
 from .verifier import MedicationVerifier, get_verifier
 from .scheduler import MedicationScheduler, get_scheduler
+from .cloud_db import CloudDatabaseClient, get_cloud_db_client
 
 __all__ = [
     "Patient",
@@ -24,4 +25,6 @@ __all__ = [
     "get_verifier",
     "MedicationScheduler",
     "get_scheduler",
+    "CloudDatabaseClient",
+    "get_cloud_db_client",
 ]
