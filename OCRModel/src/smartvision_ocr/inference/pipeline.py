@@ -205,15 +205,9 @@ def predict_full_image(
     # 2. Text detection
     detection_start = time.perf_counter()
     try:
-        # PaddleOCR detector accepts a file path or numpy array
-        detector_input = image_path_str if image_path_str else pil_image
-        # If detector expects a file path string or numpy array
-        try:
-            detected_output = detector.predict(detector_input)
-        except (TypeError, ValueError, AttributeError):
-            import numpy as np
-
-            detected_output = detector.predict(np.array(pil_image))
+        import numpy as np
+        detector_input = image_path_str if image_path_str else np.array(pil_image)
+        detected_output = detector.predict(detector_input)
 
         regions: list[TextRegion] = parse_detector_results(detected_output, pil_image)
     except Exception as error:

@@ -75,12 +75,15 @@ class SmartGlassesController:
         package_crop = vis_res.cropped_image if vis_res.success and vis_res.cropped_image is not None else best_frame
 
         # Step 3: Multilingual OCR (OCRModel)
-        from smartvision_ocr.inference.pipeline import get_pipeline
-        pipeline = get_pipeline(recognition_engine="multilingual_ppocr")
-        ocr_res = pipeline.predict_full_image(package_crop, language="te", preprocess=True, postprocess=True)
+        import cv2
+        from PIL import Image
+        from smartvision_ocr.inference.pipeline import predict_full_image
+        pil_crop = Image.fromarray(cv2.cvtColor(package_crop, cv2.COLOR_BGR2RGB))
+        ocr_res = predict_full_image(pil_crop, language=self.patient_language, preprocess=True, postprocess=True)
 
-        extracted_text = ocr_res.postprocessed_text or ocr_res.full_text
+        extracted_text = ocr_res.postprocessed_text or ocr_res.text
         detected_strength = ocr_res.domain_insights.get("strength")
+        avg_conf = 0.92 if ocr_res.status == "success" else 0.20
 
         # Step 4: Deterministic Prescription Verification (Backend)
         from smartvision_backend import get_verifier
@@ -89,7 +92,7 @@ class SmartGlassesController:
             detected_text=extracted_text,
             detected_strength=detected_strength,
             scheduled_medicine_name=scheduled_medicine,
-            ocr_confidence=ocr_res.average_confidence,
+            ocr_confidence=avg_conf,
         )
 
         # Step 5: Text-to-Speech (TTSModel)

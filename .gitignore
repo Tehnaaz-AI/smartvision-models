@@ -56,3 +56,5 @@
 **/logs/
 *.log
 .vscode/
+tts_output/
+
