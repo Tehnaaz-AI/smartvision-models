@@ -1,0 +1,11 @@
+# SmartVision - Automatic Speech Recognition (ASR) Dependencies
+# Lightweight speech-to-text and voice command recognition for smart glasses
+
+# Audio processing
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Optional lightweight offline ASR backends
+# openai-whisper / vosk / sherpa-onnx
+
+pytest>=7.0.0

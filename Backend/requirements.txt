@@ -1,0 +1,9 @@
+# SmartVision - Backend & Verification Dependencies
+# Deterministic medication verification, scheduling, and REST API service
+
+pydantic>=2.0.0
+fastapi>=0.100.0
+uvicorn>=0.22.0
+requests>=2.28.0
+
+pytest>=7.0.0

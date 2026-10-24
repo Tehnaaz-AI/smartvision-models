@@ -1,0 +1,7 @@
+# SmartVision - Video Processing Dependencies
+# Real-time frame quality assessment, blur filtering, and optimal keyframe selection
+
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+pytest>=7.0.0

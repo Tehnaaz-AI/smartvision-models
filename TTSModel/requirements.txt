@@ -1,0 +1,11 @@
+# SmartVision - Text-to-Speech (TTS) Dependencies
+# Lightweight speech synthesis for assistive smart glasses
+
+# System TTS wrapper (works offline on Windows, Linux, macOS)
+pyttsx3>=2.90
+
+# Optional online fallback / Google TTS
+gTTS>=2.5.0
+
+# Testing and utilities
+pytest>=7.0.0

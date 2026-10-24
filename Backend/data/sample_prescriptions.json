@@ -1,0 +1,47 @@
+[
+  {
+    "patient_id": "P-101",
+    "patient_name": "Rao Garu",
+    "preferred_language": "te",
+    "caregiver_contact": "+91-9876543210",
+    "prescriptions": [
+      {
+        "prescription_id": "RX-2026-001",
+        "doctor_name": "Dr. A. Sharma",
+        "date_issued": "2026-10-10",
+        "medications": [
+          {
+            "medicine_name": "Paracetamol",
+            "aliases": ["Dolo", "Calpol", "Crocin"],
+            "strength": "500 mg",
+            "dosage_form": "tablet",
+            "quantity_per_dose": "1 tablet",
+            "schedule_time": "08:00 AM",
+            "instructions": "Take 1 tablet after food for mild fever/pain",
+            "instructions_te": "జ్వరం లేదా నొప్పి కోసం భోజనం తర్వాత 1 టాబ్లెట్ వేసుకోండి"
+          },
+          {
+            "medicine_name": "Metformin",
+            "aliases": ["Glycomet", "Glucophage"],
+            "strength": "500 mg",
+            "dosage_form": "tablet",
+            "quantity_per_dose": "1 tablet",
+            "schedule_time": "08:00 PM",
+            "instructions": "Take 1 tablet with dinner for blood sugar control",
+            "instructions_te": "రాత్రి భోజనంతో పాటు 1 టాబ్లెట్ తీసుకోండి"
+          },
+          {
+            "medicine_name": "Pantoprazole",
+            "aliases": ["Pan 40", "Pantocid"],
+            "strength": "40 mg",
+            "dosage_form": "tablet",
+            "quantity_per_dose": "1 tablet",
+            "schedule_time": "07:30 AM",
+            "instructions": "Take 1 tablet in the morning before food",
+            "instructions_te": "ఉదయం భోజనానికి ముందు 1 టాబ్లెట్ తీసుకోండి"
+          }
+        ]
+      }
+    ]
+  }
+]

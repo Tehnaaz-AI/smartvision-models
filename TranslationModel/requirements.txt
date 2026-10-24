@@ -1,0 +1,4 @@
+# SmartVision - Machine Translation Dependencies
+# Trilingual translation (Telugu, Hindi, English) with medical terminology preservation
+
+pytest>=7.0.0
