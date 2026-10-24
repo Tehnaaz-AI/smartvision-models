@@ -673,6 +673,116 @@ body {
   margin-top: 1rem;
 }
 
+/* GPS Tracker & Safe-Zone Geofence Widget */
+.gps-tracker-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-header-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gps-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gps-coords-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.gps-actions-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-google {
+  background: #1a73e8;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-google:hover {
+  background: #1557b0;
+  box-shadow: 0 0 12px rgba(26, 115, 232, 0.4);
+}
+
+.nearby-pharmacies-box {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.pharmacy-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--accent-cyan);
+  font-size: 0.72rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.pharmacy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.pharmacy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.pharmacy-item a {
+  color: var(--accent-green);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pharmacy-dist {
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
 /* Toast */
 .toast {
   position: fixed;

@@ -67,6 +67,29 @@ def main():
     if response.audio_file:
         print(f"Audio File    : {response.audio_file}")
 
+    # Display GPS Telemetry and On-Lens Optical HUD Preview
+    from smartvision_hardware.hud import SmartGlassesHUD
+    from smartvision_backend.location import get_location_service
+
+    loc = get_location_service().current_location
+    maps_url = get_location_service().maps_client.get_google_maps_pin_url(loc.latitude, loc.longitude)
+
+    print(f"\n--- Wearable GPS Telemetry & Google Maps ---")
+    print(f"GPS Satellites: {loc.satellites} Locked")
+    print(f"Location Pin  : {loc.latitude:.4f} N, {loc.longitude:.4f} E")
+    print(f"Address       : {loc.address}")
+    print(f"Google Maps   : {maps_url}")
+
+    print(f"\n--- On-Lens Micro-OLED Optical HUD View ---")
+    hud = SmartGlassesHUD(width=128, height=64)
+    hud.display_verification_result(
+        is_safe=response.is_safe,
+        medicine_name=args.scheduled,
+        dosage="1 Tablet",
+    )
+    print(hud.render_ascii_preview())
+    print("=======================================================\n")
+
 
 if __name__ == "__main__":
     main()

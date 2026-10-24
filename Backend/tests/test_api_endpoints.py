@@ -91,3 +91,47 @@ def test_portal_html_index(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "SmartVision" in response.text
+
+
+def test_location_current_endpoint(client):
+    response = client.get("/api/location/current")
+    assert response.status_code == 200
+    data = response.json()
+    assert "coordinates" in data
+    assert "google_maps_pin" in data
+    assert "https://www.google.com/maps?q=" in data["google_maps_pin"]
+
+
+def test_location_update_and_wandering_alert(client):
+    # Post location outside safe-zone (e.g. 500m away)
+    response = client.post(
+        "/api/location/update",
+        json={"latitude": 17.4450, "longitude": 78.4530, "speed_kmh": 4.2},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "success"
+    assert data["location_status"]["is_inside_safe_zone"] is False
+
+
+def test_nearby_pharmacies_endpoint(client):
+    response = client.get("/api/location/nearby-pharmacies?language=te")
+    assert response.status_code == 200
+    data = response.json()
+    assert "closest_pharmacy" in data
+    assert "spoken_te" in data
+    assert len(data["pharmacies"]) >= 1
+
+
+def test_safe_zone_config_endpoint(client):
+    response = client.post(
+        "/api/location/safe-zone",
+        json={
+            "center_latitude": 17.4399,
+            "center_longitude": 78.4482,
+            "radius_meters": 250.0,
+            "home_address": "Home Villa, Banjara Hills",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["status"] == "success"

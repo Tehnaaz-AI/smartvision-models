@@ -8,6 +8,8 @@ from smartvision_ocr.inference.preprocessing import (
     enhance_contrast_clahe,
     normalize_crop_dimensions,
     preprocess_crop_for_ocr,
+    suppress_specular_glare_lens,
+    correct_orientation_lens,
 )
 
 
@@ -31,6 +33,23 @@ def test_denoise_and_sharpen():
     processed = denoise_and_sharpen(img)
     assert processed.size == (120, 48)
     assert processed.mode == "RGB"
+
+
+def test_suppress_specular_glare_lens():
+    # Create image with high-glare foil hotspot
+    arr = np.full((60, 100, 3), 120, dtype=np.uint8)
+    arr[20:35, 30:50] = 255  # Specular glare
+    img = Image.fromarray(arr)
+    glare_reduced = suppress_specular_glare_lens(img, glare_threshold=240)
+    assert glare_reduced.size == (100, 60)
+    assert glare_reduced.mode == "RGB"
+
+
+def test_correct_orientation_lens():
+    # Vertical crop (height 120, width 40) should be rotated to horizontal (120, 40) -> (40, 120)
+    img = Image.new("RGB", (40, 120), color="blue")
+    oriented = correct_orientation_lens(img)
+    assert oriented.size[0] > oriented.size[1]
 
 
 def test_preprocess_crop_for_ocr_pipeline():

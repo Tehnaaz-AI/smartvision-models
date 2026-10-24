@@ -21,6 +21,15 @@ from .alerts import (
     AlertSeverity,
     get_alert_dispatcher,
 )
+from .location import (
+    GPSCoordinates,
+    SafeHomeZone,
+    PharmacyResult,
+    LocationService,
+    GoogleMapsClient,
+    NMEAGPSParser,
+    get_location_service,
+)
 
 __all__ = [
     "Patient",
@@ -39,4 +48,11 @@ __all__ = [
     "AlertType",
     "AlertSeverity",
     "get_alert_dispatcher",
+    "GPSCoordinates",
+    "SafeHomeZone",
+    "PharmacyResult",
+    "LocationService",
+    "GoogleMapsClient",
+    "NMEAGPSParser",
+    "get_location_service",
 ]

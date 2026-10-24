@@ -12,10 +12,11 @@ from .verifier import get_verifier
 from .scheduler import get_scheduler
 from .alerts import get_alert_dispatcher
 from .cloud_db import get_cloud_db_client
+from .location import get_location_service, SafeHomeZone
 
 app = FastAPI(
     title="SmartVision Backend Service",
-    description="Deterministic medication verification, scheduling API, and Caregiver Portal for assistive smart glasses",
+    description="Deterministic medication verification, scheduling API, GPS Location, and Caregiver Portal for assistive smart glasses",
     version="1.0.0",
 )
 
@@ -23,6 +24,7 @@ scheduler = get_scheduler()
 verifier = get_verifier(patient=scheduler.patient)
 alert_dispatcher = get_alert_dispatcher()
 cloud_db = get_cloud_db_client()
+location_service = get_location_service()
 
 # Mount static web portal directory
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -127,9 +129,24 @@ def verify_medication(req: VerificationRequest):
 # --- Caregiver Portal REST Endpoints ---
 
 
+class GPSUpdateRequest(BaseModel):
+    latitude: float
+    longitude: float
+    speed_kmh: float = 0.0
+
+
+class SafeZoneUpdateRequest(BaseModel):
+    center_latitude: float
+    center_longitude: float
+    radius_meters: float = 200.0
+    home_address: str = "Home"
+
+
 @app.get("/api/caregiver/dashboard")
 def get_caregiver_dashboard():
-    """Returns complete telemetry, active prescriptions, and recent alerts for caregiver UI."""
+    """Returns complete telemetry, active prescriptions, GPS location, and recent alerts for caregiver UI."""
+    cur_lat = location_service.current_location.latitude
+    cur_lng = location_service.current_location.longitude
     return {
         "patient": {
             "id": scheduler.patient.patient_id,
@@ -142,6 +159,19 @@ def get_caregiver_dashboard():
             "battery_percent": 84,
             "temple_temp_c": 29.4,
             "cloud_sync": "SYNCED",
+        },
+        "location": {
+            "latitude": cur_lat,
+            "longitude": cur_lng,
+            "address": location_service.current_location.address,
+            "google_maps_url": location_service.maps_client.get_google_maps_pin_url(cur_lat, cur_lng),
+            "safe_zone": {
+                "center_lat": location_service.home_zone.center_latitude,
+                "center_lng": location_service.home_zone.center_longitude,
+                "radius_meters": location_service.home_zone.radius_meters,
+                "home_address": location_service.home_zone.home_address,
+            },
+            "is_inside_safe_zone": not location_service._is_wandering,
         },
         "prescriptions": [
             {
@@ -182,4 +212,65 @@ def add_caregiver_prescription(req: PrescriptionItemRequest):
 
     scheduler.patient.prescriptions[0].medications.append(new_med)
     return {"status": "success", "message": f"Added {req.name} to patient prescription"}
+
+
+# --- GPS Location & Google Maps Endpoints ---
+
+
+@app.get("/api/location/current")
+def get_current_location():
+    """Returns real-time GPS coordinates, address, and Google Maps pin link."""
+    return {
+        "status": "success",
+        "coordinates": {
+            "latitude": location_service.current_location.latitude,
+            "longitude": location_service.current_location.longitude,
+            "speed_kmh": location_service.current_location.speed_kmh,
+            "address": location_service.current_location.address,
+            "timestamp": location_service.current_location.timestamp,
+        },
+        "google_maps_pin": location_service.maps_client.get_google_maps_pin_url(
+            location_service.current_location.latitude,
+            location_service.current_location.longitude,
+        ),
+        "directions_url": location_service.maps_client.get_directions_url(
+            location_service.current_location.latitude,
+            location_service.current_location.longitude,
+        ),
+    }
+
+
+@app.post("/api/location/update")
+def update_gps_location(req: GPSUpdateRequest):
+    """Updates live GPS coordinates and evaluates wandering geofence."""
+    status = location_service.update_gps_position(req.latitude, req.longitude, req.speed_kmh)
+
+    # If patient has breached the safe zone, trigger an emergency caregiver alert
+    if status.get("wandering_alert_triggered"):
+        alert_dispatcher.dispatch_wandering_alert(
+            patient_id=scheduler.patient.patient_id,
+            patient_name=scheduler.patient.patient_name,
+            distance_from_home_m=status["distance_from_home_m"],
+            google_maps_url=status["google_maps_url"],
+        )
+
+    return {"status": "success", "location_status": status}
+
+
+@app.get("/api/location/nearby-pharmacies")
+def get_nearby_pharmacies(language: str = Query("te", description="Language for voice response ('te', 'hi', 'en')")):
+    """Finds closest pharmacies using Google Places API and formats voice guidance."""
+    return location_service.find_pharmacies_voice_response(language=language)
+
+
+@app.post("/api/location/safe-zone")
+def configure_safe_zone(req: SafeZoneUpdateRequest):
+    """Configures safe home geofence center and radius."""
+    location_service.home_zone = SafeHomeZone(
+        center_latitude=req.center_latitude,
+        center_longitude=req.center_longitude,
+        radius_meters=req.radius_meters,
+        home_address=req.home_address,
+    )
+    return {"status": "success", "message": "Safe home zone updated"}
 

@@ -30,6 +30,7 @@ class AlertType(str, Enum):
     UNSCHEDULED_TIME = "UNSCHEDULED_TIME"
     PATIENT_DISTRESS = "PATIENT_DISTRESS"
     LOW_BATTERY = "LOW_BATTERY"
+    WANDERING_DETECTED = "WANDERING_DETECTED"
 
 
 @dataclass
@@ -52,6 +53,7 @@ class EmergencyAlert:
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     medicine_name: Optional[str] = None
     detected_ocr_text: Optional[str] = None
+    google_maps_url: Optional[str] = None
     status: str = "PENDING"  # PENDING, DELIVERED, FAILED
     delivery_channels: List[str] = field(default_factory=list)
 
@@ -116,6 +118,28 @@ class AlertDispatcher:
         )
         return self._send_alert(alert)
 
+    def dispatch_wandering_alert(
+        self,
+        patient_id: str,
+        patient_name: str,
+        distance_from_home_m: float,
+        google_maps_url: str,
+    ) -> EmergencyAlert:
+        """Dispatches an alert when patient wanders outside their home safe zone."""
+        alert = EmergencyAlert(
+            alert_id=f"alt_wander_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}",
+            alert_type=AlertType.WANDERING_DETECTED,
+            severity=AlertSeverity.EMERGENCY,
+            patient_id=patient_id,
+            patient_name=patient_name,
+            message=(
+                f"GEOFENCE ALERT: {patient_name} is {distance_from_home_m:.0f}m outside safe home zone. "
+                f"Live location: {google_maps_url}"
+            ),
+            google_maps_url=google_maps_url,
+        )
+        return self._send_alert(alert)
+
     def _send_alert(self, alert: EmergencyAlert) -> EmergencyAlert:
         """Sends the alert across all configured contact channels."""
         delivered_channels: List[str] = []
@@ -139,6 +163,7 @@ class AlertDispatcher:
                         "severity": alert.severity.value,
                         "type": alert.alert_type.value,
                         "message": alert.message,
+                        "google_maps_url": alert.google_maps_url,
                         "timestamp": alert.timestamp,
                     }).encode("utf-8")
                     req = urllib.request.Request(
@@ -172,6 +197,7 @@ class AlertDispatcher:
                 "severity": a.severity.value,
                 "patient_name": a.patient_name,
                 "message": a.message,
+                "google_maps_url": a.google_maps_url,
                 "timestamp": a.timestamp,
                 "status": a.status,
                 "channels": a.delivery_channels,

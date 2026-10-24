@@ -31,6 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const hudMain = document.getElementById("hud-main");
   const hudSub = document.getElementById("hud-sub");
 
+  // GPS & Google Maps Elements
+  const gpsAddress = document.getElementById("gps-address");
+  const gpsCoordsText = document.getElementById("gps-coords-text");
+  const gpsDistanceText = document.getElementById("gps-distance-text");
+  const geofenceStatus = document.getElementById("geofence-status");
+  const btnGoogleMaps = document.getElementById("btn-google-maps");
+  const btnSimulateWalk = document.getElementById("btn-simulate-walk");
+  const btnQueryPharmacy = document.getElementById("btn-query-pharmacy");
+  const pharmacyList = document.getElementById("pharmacy-list");
+
+  let isSimulatedOutside = false;
+
   let safeCount = 18;
   let warningCount = 2;
 
@@ -331,6 +343,91 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
+  // GPS & Google Maps Location Handlers
+  function loadLocationData() {
+    fetch("/api/location/current")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data || !data.coordinates) return;
+        const coords = data.coordinates;
+        gpsAddress.textContent = coords.address || "Banjara Hills, Hyderabad";
+        gpsCoordsText.textContent = `${coords.latitude.toFixed(4)}° N, ${coords.longitude.toFixed(4)}° E`;
+        btnGoogleMaps.href = data.google_maps_pin;
+      })
+      .catch((err) => console.debug("GPS load fallback:", err));
+  }
+
+  function loadNearbyPharmacies() {
+    fetch("/api/location/nearby-pharmacies?language=te")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data || !data.pharmacies) return;
+        pharmacyList.innerHTML = data.pharmacies
+          .map(
+            (p) => `
+          <div class="pharmacy-item">
+            <div>
+              <a href="${escapeHtml(p.maps_url)}" target="_blank">${escapeHtml(p.name)}</a>
+              <div style="font-size:0.7rem; color:var(--text-dim)">${escapeHtml(p.address)}</div>
+            </div>
+            <span class="pharmacy-dist">${p.distance_meters}m</span>
+          </div>
+        `
+          )
+          .join("");
+      })
+      .catch((err) => console.debug("Pharmacy load fallback:", err));
+  }
+
+  // Simulate Patient Walking (Testing Geofence Wandering Alert)
+  btnSimulateWalk.addEventListener("click", () => {
+    isSimulatedOutside = !isSimulatedOutside;
+    // Inside: 17.4399, 78.4482 | Outside (450m away): 17.4442, 78.4525
+    const lat = isSimulatedOutside ? 17.4442 : 17.4399;
+    const lng = isSimulatedOutside ? 78.4525 : 78.4482;
+
+    fetch("/api/location/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        latitude: lat,
+        longitude: lng,
+        speed_kmh: 3.5,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const st = data.location_status;
+        gpsCoordsText.textContent = `${st.latitude.toFixed(4)}° N, ${st.longitude.toFixed(4)}° E`;
+        gpsAddress.textContent = st.address;
+        gpsDistanceText.textContent = `Distance from Home: ${st.distance_from_home_m}m`;
+        btnGoogleMaps.href = st.google_maps_url;
+
+        if (st.is_inside_safe_zone) {
+          geofenceStatus.textContent = "Safe Zone";
+          geofenceStatus.className = "badge badge-accent";
+          showToast("Patient is inside Home Safe Zone.");
+        } else {
+          geofenceStatus.textContent = "Wandering Alert!";
+          geofenceStatus.className = "badge";
+          geofenceStatus.style.background = "rgba(239, 68, 68, 0.2)";
+          geofenceStatus.style.color = "var(--accent-red)";
+          geofenceStatus.style.borderColor = "var(--accent-red)";
+          renderAlerts();
+          showToast(`GEOFENCE ALERT: Patient is ${st.distance_from_home_m}m away! Caregiver SMS dispatched with Google Maps link.`);
+        }
+      });
+  });
+
+  // Voice Search Nearby Pharmacy Simulation
+  btnQueryPharmacy.addEventListener("click", () => {
+    fetch("/api/location/nearby-pharmacies?language=te")
+      .then((res) => res.json())
+      .then((data) => {
+        showToast(`Smart Glasses Audio: "${data.spoken_en}"`);
+      });
+  });
+
   function escapeHtml(str) {
     if (!str) return "";
     return str
@@ -345,4 +442,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPrescriptions();
   renderTimeline();
   renderAlerts();
+  loadLocationData();
+  loadNearbyPharmacies();
 });

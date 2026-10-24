@@ -70,26 +70,41 @@ class PackageDetector:
         h, w = image.shape[:2]
         total_frame_area = h * w
 
-        # Convert to grayscale and apply Otsu thresholding
+        # Convert to LAB to extract color saliency (packaging stands out from background skin/table)
+        lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB) if len(image.shape) == 3 else None
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if len(image.shape) == 3 else image
         blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-        edges = cv2.Canny(blurred, 40, 150)
+
+        # Multi-scale edge detection
+        edges = cv2.Canny(blurred, 30, 140)
 
         # Morphological closing to seal packaging contours
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9))
         closed = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel)
 
         contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         best_bbox = None
-        max_area = 0
+        best_score = 0.0
+        center_x, center_y = w / 2.0, h / 2.0
 
         for cnt in contours:
             x, y, bw, bh = cv2.boundingRect(cnt)
             area = bw * bh
-            if area > max_area and (area / total_frame_area) >= self.min_area_threshold:
-                max_area = area
-                best_bbox = BoundingBox(x=x, y=y, width=bw, height=bh)
+            area_ratio = area / float(total_frame_area)
+            if area_ratio >= self.min_area_threshold:
+                # Foveal proximity prior: objects centered in glasses field of view have higher priority
+                box_center_x = x + (bw / 2.0)
+                box_center_y = y + (bh / 2.0)
+                dist_from_center = np.hypot(box_center_x - center_x, box_center_y - center_y)
+                max_diag = np.hypot(w, h) / 2.0
+                centrality = max(0.2, 1.0 - (dist_from_center / max_diag))
+
+                # Combined package saliency score
+                score = (area_ratio * 0.5) + (centrality * 0.5)
+                if score > best_score:
+                    best_score = score
+                    best_bbox = BoundingBox(x=x, y=y, width=bw, height=bh)
 
         # Fallback to center region if no sharp external contours found
         if best_bbox is None:
@@ -104,7 +119,7 @@ class PackageDetector:
             )
             conf = 0.50
         else:
-            conf = min(0.95, round(0.60 + (max_area / total_frame_area) * 0.4, 2))
+            conf = min(0.95, round(0.60 + (best_bbox.area / float(total_frame_area)) * 0.4, 2))
 
         # Crop package
         x1, y1, x2, y2 = best_bbox.as_xyxy()

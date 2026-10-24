@@ -196,6 +196,44 @@
         <!-- Dynamically populated -->
       </div>
 
+      <!-- Live GPS & Safe-Zone Geofence Card -->
+      <div class="gps-tracker-box">
+        <div class="card-header-sub">
+          <div class="gps-icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <h4>Live GPS & Geofence</h4>
+            <p class="subtitle" id="gps-address">Plot 42, Road No. 12, Banjara Hills, Hyderabad</p>
+          </div>
+          <span class="badge badge-accent" id="geofence-status">Safe Zone</span>
+        </div>
+
+        <div class="gps-coords-row">
+          <span class="mono" id="gps-coords-text">17.4399° N, 78.4482° E</span>
+          <span class="gps-dist" id="gps-distance-text">Home Radius: 200m</span>
+        </div>
+
+        <div class="gps-actions-row">
+          <a id="btn-google-maps" href="https://www.google.com/maps?q=17.4399,78.4482" target="_blank" class="btn btn-google btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Google Maps Pin
+          </a>
+          <button id="btn-simulate-walk" class="btn btn-secondary btn-sm">Simulate Patient Walk</button>
+        </div>
+
+        <!-- Nearby Pharmacies Voice Query Widget -->
+        <div class="nearby-pharmacies-box">
+          <div class="pharmacy-header">
+            <span>Nearby Medical Shops (Google Places)</span>
+            <button id="btn-query-pharmacy" class="btn-text">Voice Search</button>
+          </div>
+          <div class="pharmacy-list" id="pharmacy-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
       <!-- On-Lens HUD Simulation Card -->
       <div class="hud-simulator-box">
         <div class="hud-title-row">
