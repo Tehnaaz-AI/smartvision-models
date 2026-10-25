@@ -20,6 +20,17 @@ class PackageType(str, Enum):
 class PackageClassifier:
     """Classifies packaging form-factor using geometric and visual descriptors."""
 
+    _neural_classifier = None
+
+    @classmethod
+    def _get_neural_classifier(cls):
+        if cls._neural_classifier is None:
+            from pathlib import Path
+            from .neural_classifier import NeuralPackageClassifier
+            weights_path = Path(__file__).resolve().parent.parent.parent / "models" / "packaging_classifier.pt"
+            cls._neural_classifier = NeuralPackageClassifier(weights_path=weights_path if weights_path.exists() else None)
+        return cls._neural_classifier
+
     @staticmethod
     def classify_by_geometry(width: int, height: int, area_ratio: float = 1.0) -> Tuple[PackageType, float]:
         """Infers package type based on bounding box aspect ratio and dimensions."""
@@ -39,3 +50,18 @@ class PackageClassifier:
             return PackageType.CARTON_BOX, 0.82
         else:
             return PackageType.GENERIC_PACKAGE, 0.70
+
+    @classmethod
+    def classify(
+        cls,
+        width: int,
+        height: int,
+        frame_width: int = 1280,
+        frame_height: int = 720,
+    ) -> Tuple[PackageType, float]:
+        """Infers package type using neural classifier if weights available, else fallback."""
+        neural = cls._get_neural_classifier()
+        if neural.is_trained:
+            pkg_type, conf, _ = neural.predict(width, height, frame_width, frame_height)
+            return pkg_type, conf
+        return cls.classify_by_geometry(width, height)

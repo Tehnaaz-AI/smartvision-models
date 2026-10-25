@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-10-25T10:38:36Z",
+  "environment": {
+    "device": "CPU (Intel / AMD x86_64)",
+    "pytorch_version": "2.5.1+cpu",
+    "cuda_available": false
+  },
+  "models": {
+    "ocr": {
+      "model_name": "OCRModel (TrOCR & PP-OCRv5 Mobile)",
+      "base_model": "microsoft/trocr-base-printed + ch_PP-OCRv5_rec",
+      "checkpoint": "OCRModel/models/final/model.safetensors (1.33 GB)",
+      "loss_pre": 15.0554,
+      "loss_post": 6.2636,
+      "loss_reduction_pct": 58.4,
+      "character_error_rate_cer": 0.132,
+      "word_error_rate_wer": 0.6121,
+      "exact_match_rate": 0.0585,
+      "character_accuracy": 86.8,
+      "latency_ms_per_image": 480.17
+    },
+    "asr": {
+      "model_name": "ASRModel (OpenAI Whisper)",
+      "base_model": "openai/whisper-tiny",
+      "checkpoint": "ASRModel/models/finetuned_whisper/model.safetensors (151 MB)",
+      "loss_pre": 11.0245,
+      "loss_post": 7.761,
+      "loss_reduction_pct": 29.6,
+      "intent_accuracy": 60.0,
+      "command_precision": 100.0,
+      "command_recall": 100.0,
+      "command_f1": 100.0,
+      "word_error_rate_wer": 12.4,
+      "avg_intent_latency_ms": 0.18
+    },
+    "tts": {
+      "model_name": "TTSModel (Meta MMS VITS)",
+      "base_models": "facebook/mms-tts-tel, hin, eng",
+      "checkpoints": "TTSModel/models/adapted_tts/{te, hi, en} (145 MB ea)",
+      "supported_languages": [
+        "te",
+        "hi",
+        "en"
+      ],
+      "avg_synthesis_latency_ms": 1070.97,
+      "sampling_rate_hz": 16000,
+      "real_time_factor_rtf": 0.428,
+      "audio_intelligibility_mos_target": 4.2
+    },
+    "llm": {
+      "model_name": "LLM Conversational Safety Guardrail",
+      "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "checkpoint": "LLM/models/safety_adapters/model.safetensors (1.97 GB)",
+      "loss_pre": 9.6531,
+      "loss_post": 1.2693,
+      "loss_reduction_pct": 86.8,
+      "guardrail_adherence_rate": 100.0,
+      "dosage_hallucination_rate": 0.0,
+      "compassionate_tone_alignment": 98.5,
+      "perplexity": 3.56,
+      "avg_response_latency_ms": 1140.0
+    },
+    "vision": {
+      "model_name": "VisionModel (PackagingClassifierNet)",
+      "base_model": "PyTorch Feedforward Neural Classifier (6 -> 64 -> 32 -> 4)",
+      "checkpoint": "VisionModel/models/packaging_classifier.pt",
+      "loss_pre": 1.0959,
+      "loss_post": 0.1155,
+      "loss_reduction_pct": 89.5,
+      "overall_accuracy": 93.75,
+      "macro_precision": 94.24,
+      "macro_recall": 93.77,
+      "macro_f1": 93.71,
+      "per_class": {
+        "TABLET_STRIP": {
+          "precision": 0.96,
+          "recall": 0.8,
+          "f1_score": 0.8727,
+          "support": 60
+        },
+        "SYRUP_BOTTLE": {
+          "precision": 1.0,
+          "recall": 0.9836,
+          "f1_score": 0.9917,
+          "support": 61
+        },
+        "CARTON_BOX": {
+          "precision": 0.9667,
+          "recall": 1.0,
+          "f1_score": 0.9831,
+          "support": 58
+        },
+        "OINTMENT_TUBE": {
+          "precision": 0.8429,
+          "recall": 0.9672,
+          "f1_score": 0.9008,
+          "support": 61
+        }
+      },
+      "avg_inference_latency_ms": 0.42
+    },
+    "video": {
+      "model_name": "VideoModel (Adaptive Keyframe Quality Scorer)",
+      "base_model": "Calibrated Logistic Sharpness & Glare Estimator",
+      "checkpoint": "VideoModel/models/quality_scorer.json",
+      "loss_pre": 0.7229,
+      "loss_post": 0.5262,
+      "loss_reduction_pct": 27.2,
+      "overall_accuracy": 87.5,
+      "precision_usable": 80.0,
+      "recall_usable": 100.0,
+      "f1_score": 88.89,
+      "false_sharp_rate_fsr": 25.0,
+      "false_blurry_rate_fbr": 0.0,
+      "avg_frame_assessment_ms": 1.25
+    },
+    "translation": {
+      "model_name": "TranslationModel (Medical Bilingual Engine)",
+      "base_model": "Domain-Constrained Medical Translation Engine + IndicTrans2",
+      "brand_name_preservation_rate": 100.0,
+      "medical_phrase_recall": 70.59,
+      "bilingual_precision": 97.4,
+      "f1_score": 81.85,
+      "bleu_score": 48.7,
+      "avg_translation_latency_ms": 0.17
+    }
+  }
+}
