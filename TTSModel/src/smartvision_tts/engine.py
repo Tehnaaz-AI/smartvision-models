@@ -136,8 +136,12 @@ class TTSEngine:
         waveform = output[0].cpu().numpy()
         sample_rate = model.config.sampling_rate
 
-        # Write WAV file
-        wavfile.write(output_path, rate=sample_rate, data=waveform)
+        # Convert float32 [-1.0, 1.0] to int16 PCM for universal WAV reader compatibility
+        import numpy as np
+        waveform_int16 = (waveform * 32767.0).clip(-32768, 32767).astype(np.int16)
+
+        # Write WAV file as standard 16-bit PCM
+        wavfile.write(output_path, rate=sample_rate, data=waveform_int16)
         duration = len(waveform) / float(sample_rate)
 
         return TTSResult(
