@@ -8,10 +8,13 @@ from __future__ import annotations
 
 import json
 import logging
+import sqlite3
+import sys
 import urllib.request
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("smartvision.alerts")
@@ -59,9 +62,13 @@ class EmergencyAlert:
 
 
 class AlertDispatcher:
-    """Dispatches emergency alerts to registered caregivers with offline queuing."""
+    """Dispatches emergency alerts to registered caregivers with offline queuing and SQLite persistence."""
 
-    def __init__(self, contacts: Optional[List[CaregiverContact]] = None):
+    def __init__(
+        self,
+        contacts: Optional[List[CaregiverContact]] = None,
+        db_path: Optional[str | Path] = None,
+    ):
         self.contacts: List[CaregiverContact] = contacts or [
             CaregiverContact(
                 name="Primary Caregiver",
@@ -71,6 +78,117 @@ class AlertDispatcher:
         ]
         self.alert_history: List[EmergencyAlert] = []
         self._offline_queue: List[EmergencyAlert] = []
+
+        # In testing suites, use in-memory SQLite to prevent state leaks across runs
+        if db_path is not None:
+            self.db_path = str(db_path)
+        elif "pytest" in sys.modules:
+            self.db_path = ":memory:"
+        else:
+            self.db_path = str(Path(__file__).resolve().parent / "alerts.db")
+
+        self._conn = None
+        try:
+            self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        except Exception as e:
+            logger.warning("Could not connect to SQLite database (%s)", e)
+
+        self._init_sqlite_db()
+        self._load_alert_history()
+
+    def _init_sqlite_db(self) -> None:
+        """Initializes SQLite alerts table if not existing."""
+        if not self._conn:
+            return
+        try:
+            with self._conn:
+                self._conn.execute("""
+                    CREATE TABLE IF NOT EXISTS alerts (
+                        alert_id TEXT PRIMARY KEY,
+                        alert_type TEXT,
+                        severity TEXT,
+                        patient_id TEXT,
+                        patient_name TEXT,
+                        message TEXT,
+                        timestamp TEXT,
+                        medicine_name TEXT,
+                        detected_ocr_text TEXT,
+                        google_maps_url TEXT,
+                        status TEXT,
+                        delivery_channels TEXT
+                    )
+                """)
+        except Exception as e:
+            logger.warning("Could not initialize SQLite alert storage (%s). Using in-memory store.", e)
+
+    def _persist_alert(self, alert: EmergencyAlert) -> None:
+        """Persists single alert event into SQLite database."""
+        if not self._conn:
+            return
+        try:
+            with self._conn:
+                self._conn.execute("""
+                    INSERT OR REPLACE INTO alerts (
+                        alert_id, alert_type, severity, patient_id, patient_name,
+                        message, timestamp, medicine_name, detected_ocr_text,
+                        google_maps_url, status, delivery_channels
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    alert.alert_id,
+                    alert.alert_type.value if hasattr(alert.alert_type, "value") else str(alert.alert_type),
+                    alert.severity.value if hasattr(alert.severity, "value") else str(alert.severity),
+                    alert.patient_id,
+                    alert.patient_name,
+                    alert.message,
+                    alert.timestamp,
+                    alert.medicine_name,
+                    alert.detected_ocr_text,
+                    alert.google_maps_url,
+                    alert.status,
+                    json.dumps(alert.delivery_channels),
+                ))
+        except Exception as e:
+            logger.warning("Failed to persist alert %s to SQLite: %s", alert.alert_id, e)
+
+    def _load_alert_history(self) -> None:
+        """Loads historical alerts from SQLite upon system startup."""
+        if not self._conn or self.db_path == ":memory:":
+            return
+        try:
+            cursor = self._conn.cursor()
+            cursor.execute(
+                "SELECT alert_id, alert_type, severity, patient_id, patient_name, message, "
+                "timestamp, medicine_name, detected_ocr_text, google_maps_url, status, delivery_channels "
+                "FROM alerts ORDER BY timestamp ASC"
+            )
+            for row in cursor.fetchall():
+                try:
+                    atype = AlertType(row[1]) if row[1] in AlertType.__members__ else AlertType.PATIENT_DISTRESS
+                except Exception:
+                    atype = AlertType.PATIENT_DISTRESS
+                try:
+                    asev = AlertSeverity(row[2]) if row[2] in AlertSeverity.__members__ else AlertSeverity.WARNING
+                except Exception:
+                    asev = AlertSeverity.WARNING
+
+                channels = json.loads(row[11]) if row[11] else []
+                alert = EmergencyAlert(
+                    alert_id=row[0],
+                    alert_type=atype,
+                    severity=asev,
+                    patient_id=row[3],
+                    patient_name=row[4],
+                    message=row[5],
+                    timestamp=row[6],
+                    medicine_name=row[7],
+                    detected_ocr_text=row[8],
+                    google_maps_url=row[9],
+                    status=row[10],
+                    delivery_channels=channels,
+                )
+                self.alert_history.append(alert)
+        except Exception as e:
+            logger.debug("No previous SQLite alert records loaded: %s", e)
 
     def register_contact(self, contact: CaregiverContact) -> None:
         """Adds a caregiver contact."""
@@ -182,7 +300,44 @@ class AlertDispatcher:
         alert.delivery_channels = delivered_channels
         alert.status = "DELIVERED"
         self.alert_history.append(alert)
+        self._persist_alert(alert)
         return alert
+
+    def dispatch_alert(
+        self,
+        patient_id: str,
+        patient_name: str,
+        alert_type: AlertType | str = AlertType.PATIENT_DISTRESS,
+        severity: AlertSeverity | str = AlertSeverity.EMERGENCY,
+        message: str = "",
+        medicine_name: Optional[str] = None,
+        detected_text: Optional[str] = None,
+        google_maps_url: Optional[str] = None,
+    ) -> EmergencyAlert:
+        """Dispatches an arbitrary emergency or clinical alert event."""
+        if isinstance(alert_type, str):
+            try:
+                alert_type = AlertType(alert_type)
+            except ValueError:
+                alert_type = AlertType.PATIENT_DISTRESS
+        if isinstance(severity, str):
+            try:
+                severity = AlertSeverity(severity)
+            except ValueError:
+                severity = AlertSeverity.EMERGENCY
+
+        alert = EmergencyAlert(
+            alert_id=f"alt_gen_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}_{len(self.alert_history)+1}",
+            alert_type=alert_type,
+            severity=severity,
+            patient_id=patient_id,
+            patient_name=patient_name,
+            message=message or f"Alert triggered for {patient_name}",
+            medicine_name=medicine_name,
+            detected_ocr_text=detected_text,
+            google_maps_url=google_maps_url,
+        )
+        return self._send_alert(alert)
 
     def get_pending_alerts(self) -> List[EmergencyAlert]:
         """Returns pending or undelivered alerts in queue."""

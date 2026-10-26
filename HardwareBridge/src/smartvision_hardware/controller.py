@@ -34,9 +34,15 @@ class GlassesResponse:
 class SmartGlassesController:
     """Coordinates hardware peripherals with the SmartVision AI modules."""
 
-    def __init__(self, patient_language: str = "te", mock_hardware: bool = False):
+    def __init__(
+        self,
+        patient_language: str = "te",
+        mock_hardware: bool = False,
+        patient: Optional[Any] = None,
+    ):
         self.patient_language = patient_language
         self.mock_hardware = mock_hardware
+        self.patient = patient
 
     def process_medication_check(
         self,
@@ -86,8 +92,9 @@ class SmartGlassesController:
         avg_conf = 0.92 if ocr_res.status == "success" else 0.20
 
         # Step 4: Deterministic Prescription Verification (Backend)
-        from smartvision_backend import get_verifier
-        verifier = get_verifier()
+        from smartvision_backend import get_verifier, get_scheduler
+        active_patient = self.patient or get_scheduler().patient
+        verifier = get_verifier(patient=active_patient)
         verif_res = verifier.verify_capture(
             detected_text=extracted_text,
             detected_strength=detected_strength,

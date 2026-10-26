@@ -1,8 +1,18 @@
-"""FastAPI REST Service for SmartVision Smart Glasses Backend."""
-
+import logging
+import sys
 from pathlib import Path
-from typing import Optional
-from fastapi import FastAPI, Query
+from typing import Any, Dict, List, Optional
+import cv2
+import numpy as np
+
+# Ensure all subproject source directories are accessible
+_root = Path(__file__).resolve().parent.parent.parent.parent
+for _sub in ["OCRModel", "ASRModel", "TTSModel", "VisionModel", "VideoModel", "TranslationModel", "HardwareBridge", "LLM"]:
+    _p = str(_root / _sub / "src")
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+from fastapi import FastAPI, Query, File, UploadFile, Form, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -13,6 +23,8 @@ from .scheduler import get_scheduler
 from .alerts import get_alert_dispatcher
 from .cloud_db import get_cloud_db_client
 from .location import get_location_service, SafeHomeZone
+
+logger = logging.getLogger("smartvision.api")
 
 app = FastAPI(
     title="SmartVision Backend Service",
@@ -56,6 +68,33 @@ class VerificationResponse(BaseModel):
     spoken_message: str
     spoken_message_te: Optional[str] = None
     action_required: str
+
+
+class V1VerificationResponse(BaseModel):
+    status: str
+    is_safe_to_take: bool
+    spoken_message: str
+    spoken_message_te: Optional[str] = None
+    display_summary: Optional[str] = None
+    audio_stream_url: Optional[str] = None
+    gps_status: Optional[Dict[str, Any]] = None
+
+
+class AskRequest(BaseModel):
+    question: str
+    language: str = "te"
+    context: Optional[str] = None
+
+
+class AskResponse(BaseModel):
+    question: str
+    answer: str
+    answer_te: Optional[str] = None
+    is_safe: bool
+    guardrail_triggered: bool
+    is_emergency: bool
+    audio_stream_url: Optional[str] = None
+    engine: str
 
 
 class PrescriptionItemRequest(BaseModel):
@@ -273,4 +312,188 @@ def configure_safe_zone(req: SafeZoneUpdateRequest):
         home_address=req.home_address,
     )
     return {"status": "success", "message": "Safe home zone updated"}
+
+
+# ==============================================================================
+# V1 Smart Glasses Direct Hardware Gateway Endpoints
+# ==============================================================================
+
+
+@app.post("/api/v1/verify", response_model=V1VerificationResponse)
+async def verify_medication_v1(
+    image: UploadFile = File(..., description="Camera image frame captured by smart glasses (JPEG/PNG)"),
+    audio: Optional[UploadFile] = File(None, description="Optional voice query audio recorded from glasses microphone"),
+    latitude: Optional[float] = Form(None, description="Current GPS latitude from smart glasses GNSS"),
+    longitude: Optional[float] = Form(None, description="Current GPS longitude from smart glasses GNSS"),
+    speed_kmh: Optional[float] = Form(0.0, description="Current speed in km/h"),
+    language: str = Form("te", description="Preferred audio response language ('te', 'hi', 'en')"),
+    scheduled_medicine: Optional[str] = Form(None, description="Expected medicine name if checking a scheduled reminder"),
+    voice_query: Optional[str] = Form(None, description="Text transcription of user voice request"),
+):
+    """Direct hardware ingest endpoint for Meta-style smart glasses.
+
+    Accepts raw multipart/form-data camera frame, updates real-time GPS telemetry,
+    runs keyframe evaluation, packaging isolation, multilingual OCR, deterministic
+    verification, and returns synthesized 16kHz PCM WAV audio stream URL.
+    """
+    # 1. Update GPS telemetry if provided
+    gps_info = None
+    if latitude is not None and longitude is not None:
+        loc_status = location_service.update_gps_position(latitude, longitude, speed_kmh or 0.0)
+        gps_info = {
+            "latitude": location_service.current_location.latitude,
+            "longitude": location_service.current_location.longitude,
+            "address": location_service.current_location.address,
+            "is_inside_safe_zone": loc_status.get("is_inside_safe_zone", True),
+        }
+        if loc_status.get("wandering_alert_triggered"):
+            alert_dispatcher.dispatch_wandering_alert(
+                patient_id=scheduler.patient.patient_id,
+                patient_name=scheduler.patient.patient_name,
+                distance_from_home_m=loc_status["distance_from_home_m"],
+                google_maps_url=loc_status["google_maps_url"],
+            )
+
+    # 2. Decode camera frame
+    contents = await image.read()
+    if not contents:
+        raise HTTPException(status_code=400, detail="Empty image payload received from smart glasses.")
+
+    nparr = np.frombuffer(contents, np.uint8)
+    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if frame is None:
+        raise HTTPException(status_code=400, detail="Invalid image encoding. Expected valid JPEG or PNG.")
+
+    # 3. Transcribe audio query if audio provided and query string not supplied
+    resolved_voice_query = voice_query
+    if audio is not None and not resolved_voice_query:
+        try:
+            from smartvision_asr import get_asr_engine
+            asr_engine = get_asr_engine(language=language)
+            audio_bytes = await audio.read()
+            if audio_bytes:
+                import tempfile
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
+                    tmp.write(audio_bytes)
+                    tmp_path = tmp.name
+                asr_res = asr_engine.transcribe(tmp_path)
+                if asr_res.success and asr_res.transcribed_text:
+                    resolved_voice_query = asr_res.transcribed_text
+                Path(tmp_path).unlink(missing_ok=True)
+        except Exception as e:
+            logger.debug("Voice transcription in verify_v1 skipped: %s", e)
+
+    # 4. Execute Full Pipeline via SmartGlassesController
+    from smartvision_hardware.controller import SmartGlassesController
+    controller = SmartGlassesController(patient_language=language, patient=scheduler.patient)
+    glasses_res = controller.process_medication_check(
+        frames=[frame],
+        scheduled_medicine=scheduled_medicine,
+        voice_query=resolved_voice_query,
+    )
+
+    # 5. Dispatch mismatch alert if unsafe medication detected
+    if not glasses_res.is_safe and glasses_res.status not in ["BLURRY_CAPTURE", "UNCERTAIN_CAPTURE"]:
+        alert_dispatcher.dispatch_mismatch_alert(
+            patient_id=scheduler.patient.patient_id,
+            patient_name=scheduler.patient.patient_name,
+            detected_text=glasses_res.display_summary or "Unknown Package",
+            scheduled_medicine=scheduled_medicine,
+            reason=glasses_res.status,
+        )
+
+    # 6. Build Audio Stream URL
+    audio_stream_url = None
+    if glasses_res.audio_file:
+        audio_name = Path(glasses_res.audio_file).name
+        audio_stream_url = f"/api/v1/audio/stream/{audio_name}"
+
+    return V1VerificationResponse(
+        status=glasses_res.status,
+        is_safe_to_take=glasses_res.is_safe,
+        spoken_message=glasses_res.spoken_text,
+        spoken_message_te=glasses_res.spoken_text_te,
+        display_summary=glasses_res.display_summary,
+        audio_stream_url=audio_stream_url,
+        gps_status=gps_info,
+    )
+
+
+@app.get("/api/v1/audio/stream/{filename}")
+def stream_audio(filename: str):
+    """Streams synthesized 16kHz PCM WAV audio file to smart glasses speaker."""
+    safe_filename = Path(filename).name  # Prevent directory traversal
+    search_dirs = [
+        Path.cwd() / "tts_output",
+        _root / "tts_output",
+        _root / "TTSModel" / "tts_output",
+        Path(__file__).resolve().parent / "tts_output",
+    ]
+    target_file = None
+    for d in search_dirs:
+        candidate = d / safe_filename
+        if candidate.is_file():
+            target_file = candidate
+            break
+
+    if not target_file:
+        raise HTTPException(status_code=404, detail=f"Audio file '{safe_filename}' not found on server.")
+
+    return FileResponse(
+        str(target_file),
+        media_type="audio/wav",
+        filename=safe_filename,
+    )
+
+
+@app.post("/api/v1/ask", response_model=AskResponse)
+def ask_assistant(req: AskRequest):
+    """Clinical conversational assistant with zero dosage hallucination risk.
+
+    Answers patient questions using fine-tuned safety adapters, curated elderly
+    health guidance, and automatic emergency symptom escalation.
+    """
+    from smartvision_llm import get_llm_service
+    from smartvision_tts import get_tts_engine
+
+    llm_service = get_llm_service()
+    llm_res = llm_service.ask(question=req.question, context=req.context)
+
+    # If an emergency was detected, dispatch high-priority alert
+    if llm_res.get("is_emergency"):
+        alert_dispatcher.dispatch_alert(
+            patient_id=scheduler.patient.patient_id,
+            patient_name=scheduler.patient.patient_name,
+            alert_type="PATIENT_DISTRESS",
+            severity="EMERGENCY",
+            message=f"CRITICAL HEALTH QUERY: {req.question}. Guidance given: {llm_res.get('answer')}",
+        )
+
+    # Synthesize voice response
+    spoken_text = (
+        llm_res.get("answer_te")
+        if req.language == "te" and llm_res.get("answer_te")
+        else llm_res.get("answer")
+    )
+
+    audio_stream_url = None
+    if spoken_text:
+        try:
+            tts_engine = get_tts_engine(language=req.language)
+            tts_res = tts_engine.synthesize(spoken_text)
+            if tts_res.success and tts_res.audio_path:
+                audio_stream_url = f"/api/v1/audio/stream/{Path(tts_res.audio_path).name}"
+        except Exception as e:
+            logger.debug("TTS synthesis in ask_endpoint skipped: %s", e)
+
+    return AskResponse(
+        question=req.question,
+        answer=llm_res.get("answer", ""),
+        answer_te=llm_res.get("answer_te"),
+        is_safe=llm_res.get("is_safe", True),
+        guardrail_triggered=llm_res.get("guardrail_triggered", False),
+        is_emergency=llm_res.get("is_emergency", False),
+        audio_stream_url=audio_stream_url,
+        engine=llm_res.get("engine", "default"),
+    )
 

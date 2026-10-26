@@ -135,3 +135,90 @@ def test_safe_zone_config_endpoint(client):
     )
     assert response.status_code == 200
     assert response.json()["status"] == "success"
+
+
+def test_v1_verify_multipart_blurry(client):
+    import cv2
+    import numpy as np
+    import io
+
+    # Blank image (will be flagged as blurry/unusable by VideoModel)
+    blank_img = np.zeros((120, 160, 3), dtype=np.uint8)
+    _, img_bytes = cv2.imencode(".jpg", blank_img)
+
+    files = {"image": ("frame.jpg", io.BytesIO(img_bytes.tobytes()), "image/jpeg")}
+    data = {
+        "latitude": "17.4399",
+        "longitude": "78.4482",
+        "language": "te",
+    }
+    response = client.post("/api/v1/verify", files=files, data=data)
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["status"] == "BLURRY_CAPTURE"
+    assert payload["is_safe_to_take"] is False
+    assert payload["gps_status"] is not None
+    assert payload["gps_status"]["is_inside_safe_zone"] is True
+
+
+def test_v1_verify_invalid_image(client):
+    import io
+    files = {"image": ("bad.jpg", io.BytesIO(b"not_an_image_data"), "image/jpeg")}
+    response = client.post("/api/v1/verify", files=files)
+    assert response.status_code == 400
+    assert "Invalid image" in response.json()["detail"]
+
+
+def test_v1_audio_stream_endpoint(client, tmp_path):
+    from pathlib import Path
+    import wave
+    import struct
+
+    # Test 404
+    resp_404 = client.get("/api/v1/audio/stream/non_existent_file.wav")
+    assert resp_404.status_code == 404
+
+    # Create dummy WAV in tts_output
+    tts_dir = Path.cwd() / "tts_output"
+    tts_dir.mkdir(parents=True, exist_ok=True)
+    test_wav = tts_dir / "test_stream_sample.wav"
+
+    with wave.open(str(test_wav), "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(16000)
+        wf.writeframes(struct.pack("<h", 0) * 160)
+
+    try:
+        resp_200 = client.get("/api/v1/audio/stream/test_stream_sample.wav")
+        assert resp_200.status_code == 200
+        assert "audio/wav" in resp_200.headers["content-type"]
+        assert len(resp_200.content) > 0
+    finally:
+        test_wav.unlink(missing_ok=True)
+
+
+def test_v1_ask_conversational_endpoint(client):
+    # Standard health question
+    resp = client.post("/api/v1/ask", json={"question": "What is Dolo 650 used for?", "language": "en"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "Dolo 650" in data["answer"] or "paracetamol" in data["answer"].lower()
+    assert data["is_safe"] is True
+    assert data["guardrail_triggered"] is False
+
+
+def test_v1_ask_emergency_interceptor_triggers_alert(client):
+    resp = client.post("/api/v1/ask", json={"question": "I have severe chest pain and left arm numbness", "language": "en"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["is_emergency"] is True
+    assert data["guardrail_triggered"] is True
+    assert "emergency" in data["answer"].lower()
+
+    # Verify high priority alert was recorded
+    alerts_resp = client.get("/api/caregiver/alerts")
+    assert alerts_resp.status_code == 200
+    alerts = alerts_resp.json()["alerts"]
+    assert any("chest pain" in a["message"].lower() for a in alerts)
+
